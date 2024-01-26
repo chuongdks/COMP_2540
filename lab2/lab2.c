@@ -188,74 +188,89 @@ void printStack ()
     }
 }
 
+//Make the Linked List Empty
+void emptyList() 
+{
+   Node* currentNode = head;
+   Node* nextNode;
+
+   //Assign next to current-> nextNode then delete the current node, repeat until over
+   while (currentNode != NULL) 
+   {
+      nextNode = currentNode->nextNodePtr;
+      free (currentNode);
+      currentNode = nextNode;
+   }
+   //Delete the start node
+   head = NULL;
+}
+
 //Bracket Matching function [({})] is good; }{[], ({}] is wrong
-// int BracketMatch (char* string, int size)
-// {
-//     int flag = 0; //use flag instead of return 1, -1 cuz need to free the stack before returning
-//     Stack* stack = Create_Stack(50); // Create a new stack
+int BracketMatch (char* string, int size)
+{
+    int flag = 0; //use flag instead of return 1, -1 cuz need to free the stack before returning
 
-//     //Scanning the string each array for the opening/closing group symbol parenthesis
-//     for (int i = 0; i < size; i++)
-//     {
-//         // Check if the current character is valid
-//         if (strchr ("{}[]()0123456789+-*/", string[i]) == NULL)
-//         {
-//             printf("Warning: Invalid character '%c' in the string. Please use the following character: {,},[,],(,),0,1,2,3,4,5,6,7,8,9,+,-,*,/.\n", string[i]);
-//             flag = -1;
-//             break;
-//         }
+    //Scanning the string each array for the opening/closing group symbol parenthesis
+    for (int i = 0; i < size; i++)
+    {
+        // Check if the current character is valid
+        if (strchr ("{}[]()0123456789+-*/", string[i]) == NULL)
+        {
+            printf("Warning: Invalid character '%c' in the string. Please use the following character: {,},[,],(,),0,1,2,3,4,5,6,7,8,9,+,-,*,/.\n", string[i]);
+            flag = -1;
+            break;
+        }
 
-//         //if string[i] is an opening grouping symbol then push to the stack
-//         if (string[i] == '(' ||
-//             string[i] == '{' || 
-//             string[i] == '[')
-//         {
-//             push (stack, string[i]);
-//         }
-//         //if string[i] is a closing grouping symbol then
-//         else if (string[i] == ')' ||
-//                  string[i] == '}' || 
-//                  string[i] == ']')
-//         {
-//             //if the stack is empty return false
-//             if (isEmpty(stack)) 
-//             {
-//                 printf("Warning: No items in the stack to match with.\n");
-//                 flag = -1;
-//                 break;
-//             }
+        //if string[i] is an opening grouping symbol then push to the stack
+        if (string[i] == '(' ||
+            string[i] == '{' || 
+            string[i] == '[')
+        {
+            push (string[i]);
+        }
+        //if string[i] is a closing grouping symbol then
+        else if (string[i] == ')' ||
+                 string[i] == '}' || 
+                 string[i] == ']')
+        {
+            //if the stack is empty return false
+            if (isEmpty()) 
+            {
+                printf("Warning: No items in the stack to match with.\n");
+                flag = -1;
+                break;
+            }
 
-//             //If the item of the pop stack does not match the type of string[i] then return false
-//             char pop_character = pop(stack); 
-//             if ((pop_character == '(' && string[i] != ')') ||
-//                 (pop_character == '{' && string[i] != '}') ||
-//                 (pop_character == '[' && string[i] != ']'))
-//             {
-//                 printf("Warning: Wrong type/order of parenthesis.\n");
-//                 flag = -1;
-//                 break;
-//             }
-//         }
-//     }
+            //If the item of the pop stack does not match the type of string[i] then return false
+            char pop_character = pop(); 
+            if ((pop_character == '(' && string[i] != ')') ||
+                (pop_character == '{' && string[i] != '}') ||
+                (pop_character == '[' && string[i] != ']'))
+            {
+                printf("Warning: Wrong type/order of parenthesis.\n");
+                flag = -1;
+                break;
+            }
+        }
+    }
 
-//     //if at the end the stack is empty then return true, else the Bracket is not match
-//     if (isEmpty(stack) && flag == 0)
-//     {
-//         printf("Every symbol matched.\n");
-//         flag = 1;
-//     }
-//     else if (flag == 0)
-//     {
-//         printf("Warning: Some parenthesis symbol were never matched.\n");
-//         flag = -1;   
-//     }
+    //if at the end the stack is empty then return true, else the Bracket is not match
+    if (isEmpty() && flag == 0)
+    {
+        printf("Every symbol matched.\n");
+        flag = 1;
+    }
+    else if (flag == 0)
+    {
+        printf("Warning: Some parenthesis symbol were never matched.\n");
+        flag = -1;   
+    }
 
-//     // Free the memory allocated for the stack
-//     free(stack->stack);
-//     free(stack);    
+    // Free the memory allocated for the stack
+    emptyList();
 
-//     return flag;
-// }
+    return flag;
+}
 
 // Display the menu options.
 void menu(void) 
@@ -279,7 +294,7 @@ void menu(void)
 int main() {
     int choice = 0;
     //Node* node = NULL;
-    char data;
+    char data, string[100];
 
     // Creating the starting/ending node.
     tail = head;
@@ -375,16 +390,16 @@ int main() {
                 break;
 
             //Press 11 to use the Bracket Matching function for a string
-            // case 7:
-            //     printf("Enter the string with parenthesis: ");
+            case 11:
+                printf("Enter the string with parenthesis: ");
                 
-            //     //User enter the string, added getchar() to help with the input buffer
-            //     getchar();
-            //     fgets(string, sizeof(string), stdin);
-            //     string[strlen(string)-1] = '\0';
+                //User enter the string, added getchar() to help with the input buffer
+                getchar();
+                fgets(string, sizeof(string), stdin);
+                string[strlen(string)-1] = '\0';
 
-            //     BracketMatch (string ,strlen(string));
-            //     break;
+                BracketMatch (string ,strlen(string));
+                break;
             
             // //Test to see the running time for the function LanguageRecognizer()
             // case 9:
