@@ -34,10 +34,21 @@ char removeHead ()
     {
         printf("Error: The list is empty\n");
     }
+
     Node* tempNode = head;
-    head = head->nextNodePtr;
-    tempNode->nextNodePtr = NULL;
     char removedData = tempNode->data;
+
+    if (head == tail)
+    {
+        // Only one node in the list
+        head = tail = NULL;
+    }
+    else
+    {
+        head = head->nextNodePtr;
+        tempNode->nextNodePtr = NULL;
+    }
+    
     free (tempNode);
     size--;
     return removedData;
@@ -69,6 +80,7 @@ char removeTail()
         printf("Error: The list is empty\n");
         return -1;
     }
+
     Node* currentNode = head;
     Node* tempNode = tail;
     char removedCharacter = tempNode->data;
