@@ -46,7 +46,7 @@ char removeHead ()
 //addTail() function: Insert at the tail
 void addTail (char data) 
 {
-    Node* newNodeTail = (Node*) malloc( sizeof( Node));
+    Node* newNodeTail = (Node*) malloc (sizeof(Node));
     newNodeTail->data = data;
     newNodeTail->nextNodePtr = NULL;
     if (tail == NULL)
@@ -119,10 +119,28 @@ char pop ()
     return poppedData; //return head->data will cause error cuz what if head->data is NULL, it will return a NULL pointer
 }
 
-//Return the size of the items in the stack
-int Stack_Size()
+//Insert item at the tail
+void enQueue (char data) 
 {
-    return size;
+    addTail (data);
+}
+
+//Remove node at the head
+char deQueue () 
+{
+    if (isEmpty())
+    {
+        printf("Error: The list is empty\n"); //why do we need this function, this is the same as pop () lol
+        return -1;
+    }
+    char poppedData = removeHead();
+    return poppedData; //return head->data will cause error cuz what if head->data is NULL, it will return a NULL pointer
+}
+
+//Return the size of the items in the stack
+int Size ()
+{
+    return size; //why do we need this function lol
 }
 
 //Content of the Head stack
@@ -227,88 +245,22 @@ void printStack ()
 //     return flag;
 // }
 
-// //Language Recognizer, detect strings contain # of 0 then a # of 1 (00001111, 0011, 01 good; 10, 00111, 0101 bad)
-// int LanguageRecognizer (char* string, int size)
-// {
-//     int zero_counter = 0, one_counter = 0; //not sure what to do with them, prof said secret trick is to count # of 0 and 1
-//     int flag = 0; //use flag instead of return 1, -1 cuz need to free the stack before returning
-    
-//     Stack* stack = Create_Stack(50); // Create a new stack
-
-//     // Start measuring time
-//     clock_t start_time = clock();
-
-//     //Scan the string
-//     for (int i = 0; i < size; i++)
-//     {
-//         //If the items is '0', push it to the stack
-//         if (string[i] == '0')
-//         {
-//             push (stack, string[i]);
-//             zero_counter++;
-//         }
-//         //if the items is '1' then
-//         else if (string[i] == '1')
-//         {
-//             //if the stack is empty return false
-//             if (isEmpty(stack)) 
-//             {
-//                 printf("Warning: Detect case where # of '1' > '0' case.\n");
-//                 flag = -1;
-//                 break;
-//             }
-//             //if the next item after '1' is '0' (0101) then return false
-//             if (i + 1 < size && string[i + 1] == '0')
-//             {
-//                 printf("Warning: Detect a 0101 case.\n");
-//                 flag = -1; 
-//                 break;              
-//             }
-//             pop(stack);
-//             one_counter++;
-//         }
-//     }
-
-//     //if at the end the stack is empty then return true, else the Bracket is not match
-//     if (isEmpty(stack) && flag == 0)
-//     {
-//         printf("Every number is balance.\n");
-//         flag = 1;
-//     }
-//     else if (flag == 0)
-//     {
-//         printf("Warning: Unbalanced number.\n");
-//         flag = -1;       
-//     }
-
-//     // Stop measuring time
-//     clock_t end_time = clock();
-//     // Calculate elapsed time in nanoseconds
-//     double elapsed_time_ns = ((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1e9;
-//     // Print the elapsed time
-//     printf("Elapsed Time: %.2f nanoseconds\n", elapsed_time_ns);
-    
-//     // Free the memory allocated for the stack
-//     free(stack->stack);
-//     free(stack);    
-
-//     return flag;
-// }
-
 // Display the menu options.
 void menu(void) 
 {
     puts("\nEnter your choice:\n"
     " 1. Push.\n"
     " 2. Pop.\n"
-    " 3. Check Empty.\n"
-    " 4. Check Size.\n"
-    " 5. Content of Top Stack.\n"
-    " 6. Content of Bottom Stack.\n"
-    " 7. Print Stack .\n"
-    " 8. Bracket Matching.\n"
-    " 9. Language recognizer.\n"
-    " 10. Performance test for Language recognizer.\n"
+    " 3. enQueue.\n"
+    " 4. deQueue.\n"
+    " 5. Remove Bottom.\n"
+    " 6. Check Empty.\n"
+    " 7. Check Size.\n"
+    " 8. Content of Top Stack.\n"
+    " 9. Content of Bottom Stack.\n"
+    " 10. Print Stack .\n"
+    " 11. Bracket Matching.\n"
+    " 12. Performance test for Language recognizer.\n"
     " 0. Exit.\n");
 }
 
@@ -344,8 +296,33 @@ int main() {
                 printf("\n");
                 break;
 
-            //Press 3 to check if stack is empty
+            //Press 3 to let user enter new item and push it in the stack, you can press 1 *string here* to push a bunch of char at the same time
             case 3:
+                printf ("Enter any word to enQueue in the stack: ");
+                scanf (" %c", &data);
+                enQueue (data);
+                printStack ();
+                printf ("\n");
+                break;
+            
+            //Press 4 to deQueue item out of the stack
+            case 4:
+                data = deQueue();
+                printf("Item deQueue out of the stack: %c\n", data);
+                printStack (data);
+                printf("\n");
+                break;     
+
+            //Press 5 to Remove Bottom item out of the stack
+            case 5:
+                data = removeTail ();
+                printf("Item at the bottom removed out of the stack: %c\n", data);
+                printStack (data);
+                printf("\n");
+                break;             
+
+            //Press 6 to check if stack is empty
+            case 6:
                 if (isEmpty())
                 {
                     printf("The Stack is empty\n");
@@ -356,13 +333,13 @@ int main() {
                 }
                 break;
 
-            //Press 4 to see the current stack size
-            case 4:
-                printf("Current size of the Stack is: %d\n", Stack_Size ());
+            //Press 7 to see the current stack size
+            case 7:
+                printf("Current size of the Stack is: %d\n", Size());
                 break;
 
-            //Press 5 to see the content of the tops stack
-            case 5:
+            //Press 8 to see the content of the tops stack
+            case 8:
                 data = getFirst ();
                 if (data != -1) 
                 {
@@ -370,8 +347,8 @@ int main() {
                 }
                 break;
 
-            //Press 6 to see the content of the tops stack
-            case 6:
+            //Press 9 to see the content of the tops stack
+            case 9:
                 data = getLast ();
                 if (data != -1) 
                 {
@@ -379,21 +356,13 @@ int main() {
                 }
                 break;
             
-            //Press 7 to print the whole stack
-            case 7:
+            //Press 10 to print the whole stack
+            case 10:
                 printStack ();
                 printf("\n");
                 break;
 
-            //Press 7 to print the whole stack
-            case 8:
-                printf ("Enter any word to add last in the stack: ");
-                scanf (" %c", &data);
-                addTail (data);
-                printStack ();
-                printf ("\n");
-                break;
-            //Press 7 to use the Bracket Matching function for a string
+            //Press 11 to use the Bracket Matching function for a string
             // case 7:
             //     printf("Enter the string with parenthesis: ");
                 
@@ -403,18 +372,6 @@ int main() {
             //     string[strlen(string)-1] = '\0';
 
             //     BracketMatch (string ,strlen(string));
-            //     break;
-
-            // //Press 8 to use the Language Recognizer function for a string
-            // case 8:
-            //     printf("Enter the string with 0n1n: ");
-
-            //     //User enter the string, added getchar() to help with the input buffer
-            //     getchar();
-            //     fgets(string, sizeof(string), stdin);
-            //     string[strlen(string)-1] = '\0';
-
-            //     LanguageRecognizer (string ,strlen(string));
             //     break;
             
             // //Test to see the running time for the function LanguageRecognizer()
@@ -448,7 +405,7 @@ int main() {
             //     }
             //     break;
 
-            //Press 9 to exit the program
+            //Press 0 to exit the program
             case 0:
                 exit(0);
 
