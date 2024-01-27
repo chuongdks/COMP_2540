@@ -268,6 +268,42 @@ int BracketMatch (Node* node, char* string, int size)
     return flag;
 }
 
+//Merged 2 Sorted Queue A and Queue B into Queue S
+void mergeSortedQueues(Node* A, Node* B, Node* S) 
+{
+    while (!isEmpty(A) && !isEmpty(B)) 
+    {
+        if (A->head->data <= B->head->data) 
+        {
+            addTail (S, A->head->data);
+            removeHead (A);
+        } 
+        else 
+        {
+            addTail (S, B->head->data);
+            removeHead (B);
+        }
+    }
+
+    // Enqueue remaining elements of queue A, if any
+    while (!isEmpty(A)) 
+    {
+        addTail (S, A->head->data);
+        removeHead (A);
+    }
+
+    // Enqueue remaining elements of queue B, if any
+    while (!isEmpty(B)) 
+    {
+        addTail (S, B->head->data);
+        removeHead (B);
+    }
+
+    // Free memory for queues A and B
+    emptyList(A);
+    emptyList(B);
+}
+
 // Display the menu options.
 void menu(void) 
 {
@@ -283,7 +319,7 @@ void menu(void)
     " 9. Content of Bottom Stack.\n"
     " 10. Print Stack .\n"
     " 11. Bracket Matching.\n"
-    " 12. Bracket Matching.\n"
+    " 12. Merged 2 Sorted List of Integers.\n"
     " 13. Performance test for Language recognizer.\n"
     " 0. Exit.\n");
 }
@@ -294,7 +330,11 @@ int main() {
     node = createNode();
     char data, string[100];
     Node* nodeBracket = NULL;
-
+    
+    Node* queueA = NULL;
+    Node* queueB = NULL;
+    Node* queueS = NULL;
+    
     while (1) 
     {
         menu ();
@@ -393,6 +433,59 @@ int main() {
                 string[strlen(string)-1] = '\0';
 
                 BracketMatch (nodeBracket, string ,strlen (string));
+                break;
+
+            //Press 11 to use the Bracket Matching function for a string
+            case 12:
+                // Initialize queues
+                queueA = createNode();
+                queueB = createNode();
+                queueS = createNode();
+
+                //printf("Enter the string with parenthesis: ");
+                
+                // //User enter the string, added getchar() to help with the input buffer
+                // getchar();
+                // fgets(stringA, sizeof(stringA), stdin);
+                // stringA[strlen(stringA)-1] = '\0';
+
+                // //User enter the string, added getchar() to help with the input buffer
+                // getchar();
+                // fgets(stringB, sizeof(stringB), stdin);
+                // stringB[strlen(stringB)-1] = '\0';
+
+                // Sample data for lists A and B
+                char listA[] = {'6', '7', '8', '9'};
+                char listB[] = {'1', '2', '3', '4', '5'};
+
+                // Enqueue elements from lists A and B into their respective queues
+                for (int i = 0; i < sizeof(listA) / sizeof(listA[0]) ; i++)
+                {
+                    addTail (queueA, listA[i]);
+                }
+                
+                for (int i = 0; i < sizeof(listB) / sizeof(listB[0]); i++)
+                {
+                    addTail (queueB, listB[i]);
+                }
+                
+
+                // Merge queues A and B into queue S
+                mergeSortedQueues (queueA, queueB, queueS);
+
+                // Print the merged queue S
+                printf("Merged Queue S: ");
+                while (!isEmpty(queueS)) 
+                {
+                    printf("%c ", deQueue (queueS));
+                }
+                printf("\n");
+
+                // Free memory allocated to queues
+                free(queueA);
+                free(queueB);
+                free(queueS);
+
                 break;
             
             // //Test to see the running time for the function LanguageRecognizer()
