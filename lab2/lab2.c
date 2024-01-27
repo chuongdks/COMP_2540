@@ -21,6 +21,24 @@ Node* createNode ()
     return newNode;
 }
 
+typedef struct Int_Node_struct{
+    int data;
+    struct Int_Node_struct* nextNodePtr;
+    struct Int_Node_struct* head;
+    struct Int_Node_struct* tail;
+    int size;
+} Int_Node;
+
+// Function to create a new Node
+Int_Node* createNodeInt () 
+{
+    Int_Node* newNode = (Int_Node*) malloc (sizeof(Int_Node));
+    newNode->head = NULL;
+    newNode->tail = NULL;
+    newNode->size = 0;
+    return newNode;
+}
+
 //addHead() function: Insert at the head
 void addHead (Node* node, char data) //add Node
 {
@@ -28,7 +46,7 @@ void addHead (Node* node, char data) //add Node
     newNodeHead->data = data;
     newNodeHead->nextNodePtr = node->head;
     node->head = newNodeHead;
-    if (node->tail == NULL)
+    if (node->tail == NULL) //if no node has been added yet
     {
         node->tail = node->head;
     }
@@ -62,13 +80,58 @@ char removeHead (Node* node) //add Node
     return removedData;
 }
 
+//removeHead() function: Remove at the head
+char removeHeadInt (Int_Node* node) //add Node
+{
+    if (node->head == NULL)
+    {
+        printf("Error: The list is empty\n");
+    }
+
+    Int_Node* tempNode = node->head;
+    char removedData = tempNode->data;
+
+    if (node->head == node->tail)
+    {
+        // Only one node in the list
+        node->head = node->tail = NULL;
+    }
+    else
+    {
+        node->head = node->head->nextNodePtr;
+        tempNode->nextNodePtr = NULL;
+    }
+    
+    free (tempNode);
+    node->size--;
+    return removedData;
+}
+
 //addTail() function: Insert at the tail
 void addTail (Node* node, char data) //add Node
 {
     Node* newNodeTail = (Node*) malloc (sizeof(Node));
     newNodeTail->data = data;
     newNodeTail->nextNodePtr = NULL;
-    if (node->tail == NULL)
+    if (node->tail == NULL) //if no node has been added yet
+    {
+        node->head = node->tail = newNodeTail;
+    }
+    else
+    {
+        node->tail->nextNodePtr = newNodeTail;
+        node->tail = newNodeTail;
+    }
+    node->size++;
+}
+
+//addTail() function: Insert at the tail
+void addTailInt (Int_Node* node, int data) //add Node
+{
+    Int_Node* newNodeTail = (Int_Node*) malloc (sizeof(Int_Node));
+    newNodeTail->data = data;
+    newNodeTail->nextNodePtr = NULL;
+    if (node->tail == NULL) //if no node has been added yet
     {
         node->head = node->tail = newNodeTail;
     }
@@ -117,6 +180,12 @@ char removeTail(Node* node) //add Node
 
 //Check if the stack is empty
 int isEmpty (Node* node) //add Node
+{
+    return node->size == 0;
+}
+
+//Check if the stack is empty
+int isEmptyInt (Int_Node* node) //add Node
 {
     return node->size == 0;
 }
@@ -201,6 +270,23 @@ void emptyList (Node* node) //add Node
    node->head = NULL;
 }
 
+//Make the Linked List Empty
+void emptyListInt (Int_Node* node) //add Node
+{
+   Int_Node* currentNode = node->head;
+   Int_Node* nextNode;
+
+   //Assign next to current-> nextNode then delete the current node, repeat until over
+   while (currentNode != NULL) 
+   {
+      nextNode = currentNode->nextNodePtr;
+      free (currentNode);
+      currentNode = nextNode;
+   }
+   //Delete the start node
+   node->head = NULL;
+}
+
 //Bracket Matching function [({})] is good; }{[], ({}] is wrong
 int BracketMatch (Node* node, char* string, int size)
 {
@@ -269,58 +355,54 @@ int BracketMatch (Node* node, char* string, int size)
 }
 
 //Merged 2 Sorted Queue A and Queue B into Queue S
-void mergeSortedQueues(Node* A, Node* B, Node* S) 
+void mergeSortedQueues(Int_Node* A, Int_Node* B, Int_Node* S) 
 {
-    while (!isEmpty(A) && !isEmpty(B)) 
+    while (!isEmptyInt(A) && !isEmptyInt(B)) 
     {
         if (A->head->data <= B->head->data) 
         {
-            addTail (S, A->head->data);
-            removeHead (A);
+            addTailInt (S, A->head->data);
+            removeHeadInt (A);
         } 
         else 
         {
-            addTail (S, B->head->data);
-            removeHead (B);
+            addTailInt (S, B->head->data);
+            removeHeadInt (B);
         }
     }
 
     // Enqueue remaining elements of queue A, if any
-    while (!isEmpty(A)) 
+    while (!isEmptyInt(A)) 
     {
-        addTail (S, A->head->data);
-        removeHead (A);
+        addTailInt (S, A->head->data);
+        removeHeadInt (A);
     }
 
     // Enqueue remaining elements of queue B, if any
-    while (!isEmpty(B)) 
+    while (!isEmptyInt(B)) 
     {
-        addTail (S, B->head->data);
-        removeHead (B);
+        addTailInt (S, B->head->data);
+        removeHeadInt (B);
     }
 
     // Free memory for queues A and B
-    emptyList(A);
-    emptyList(B);
+    emptyListInt(A);
+    emptyListInt(B);
 }
 
 // Display the menu options.
 void menu(void) 
 {
     puts("\nEnter your choice:\n"
-    " 1. Push.\n"
-    " 2. Pop.\n"
-    " 3. enQueue.\n"
-    " 4. deQueue.\n"
+    " 1. Push.\t3. enQueue.\n"
+    " 2. Pop.\t4. deQueue.\n"
     " 5. Remove Bottom.\n"
-    " 6. Check Empty.\n"
-    " 7. Check Size.\n"
-    " 8. Content of Top Stack.\n"
-    " 9. Content of Bottom Stack.\n"
+    " 6. Check Empty.\t7. Check Size.\n"
+    " 8. Top Stack Content.\t9. Bottom Stack Content.\n"
     " 10. Print Stack .\n"
     " 11. Bracket Matching.\n"
     " 12. Merged 2 Sorted List of Integers.\n"
-    " 13. Performance test for Language recognizer.\n"
+    " 13. Performance test for Merging 2 Sorted List.\n"
     " 0. Exit.\n");
 }
 
@@ -331,9 +413,9 @@ int main() {
     char data, string[100];
     Node* nodeBracket = NULL;
     
-    Node* queueA = NULL;
-    Node* queueB = NULL;
-    Node* queueS = NULL;
+    Int_Node* queueA = NULL;
+    Int_Node* queueB = NULL;
+    Int_Node* queueS = NULL;
     
     while (1) 
     {
@@ -438,9 +520,9 @@ int main() {
             //Press 11 to use the Bracket Matching function for a string
             case 12:
                 // Initialize queues
-                queueA = createNode();
-                queueB = createNode();
-                queueS = createNode();
+                queueA = createNodeInt();
+                queueB = createNodeInt();
+                queueS = createNodeInt();
 
                 //printf("Enter the string with parenthesis: ");
                 
@@ -455,18 +537,18 @@ int main() {
                 // stringB[strlen(stringB)-1] = '\0';
 
                 // Sample data for lists A and B
-                char listA[] = {'6', '7', '8', '9'};
-                char listB[] = {'1', '2', '3', '4', '5'};
+                int listA[] = {10,11,12,13};
+                int listB[] = {1,2,3,4};
 
                 // Enqueue elements from lists A and B into their respective queues
                 for (int i = 0; i < sizeof(listA) / sizeof(listA[0]) ; i++)
                 {
-                    addTail (queueA, listA[i]);
+                    addTailInt (queueA, listA[i]);
                 }
                 
                 for (int i = 0; i < sizeof(listB) / sizeof(listB[0]); i++)
                 {
-                    addTail (queueB, listB[i]);
+                    addTailInt (queueB, listB[i]);
                 }
                 
 
@@ -475,9 +557,9 @@ int main() {
 
                 // Print the merged queue S
                 printf("Merged Queue S: ");
-                while (!isEmpty(queueS)) 
+                while (!isEmptyInt (queueS)) 
                 {
-                    printf("%c ", deQueue (queueS));
+                    printf("%d ", removeHeadInt (queueS));
                 }
                 printf("\n");
 
