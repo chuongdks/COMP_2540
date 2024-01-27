@@ -6,181 +6,177 @@
 typedef struct Node_struct{
     char data;
     struct Node_struct* nextNodePtr;
+    struct Node_struct* head;
+    struct Node_struct* tail;
+    int size;
 } Node;
 
-// Two global pointer variables to keep the start and end of the list, initialized with NULL.
-Node* head = NULL;
-Node* tail = NULL;
-int size = 0;
+// Function to create a new Node
+Node* createNode () 
+{
+    Node* newNode = (Node*) malloc (sizeof(Node));
+    newNode->head = NULL;
+    newNode->tail = NULL;
+    newNode->size = 0;
+    return newNode;
+}
 
 //addHead() function: Insert at the head
-void addHead (char data) 
+void addHead (Node* node, char data) //add Node
 {
     Node* newNodeHead = (Node*) malloc (sizeof(Node));
     newNodeHead->data = data;
-    newNodeHead->nextNodePtr = head;
-    head = newNodeHead;
-    if (tail == NULL)
+    newNodeHead->nextNodePtr = node->head;
+    node->head = newNodeHead;
+    if (node->tail == NULL)
     {
-        tail = head;
+        node->tail = node->head;
     }
-    size++;
+    node->size++;
 }
 
 //removeHead() function: Remove at the head
-char removeHead () 
+char removeHead (Node* node) //add Node
 {
-    if (head == NULL)
+    if (node->head == NULL)
     {
         printf("Error: The list is empty\n");
     }
 
-    Node* tempNode = head;
+    Node* tempNode = node->head;
     char removedData = tempNode->data;
 
-    if (head == tail)
+    if (node->head == node->tail)
     {
         // Only one node in the list
-        head = tail = NULL;
+        node->head = node->tail = NULL;
     }
     else
     {
-        head = head->nextNodePtr;
+        node->head = node->head->nextNodePtr;
         tempNode->nextNodePtr = NULL;
     }
     
     free (tempNode);
-    size--;
+    node->size--;
     return removedData;
 }
 
 //addTail() function: Insert at the tail
-void addTail (char data) 
+void addTail (Node* node, char data) //add Node
 {
     Node* newNodeTail = (Node*) malloc (sizeof(Node));
     newNodeTail->data = data;
     newNodeTail->nextNodePtr = NULL;
-    if (tail == NULL)
+    if (node->tail == NULL)
     {
-        head = tail = newNodeTail;
+        node->head = node->tail = newNodeTail;
     }
     else
     {
-        tail->nextNodePtr = newNodeTail;
-        tail = newNodeTail;
+        node->tail->nextNodePtr = newNodeTail;
+        node->tail = newNodeTail;
     }
-    size++;
+    node->size++;
 }
 
 //removeTail() function: Remove at the tail
-char removeTail() 
+char removeTail(Node* node) //add Node
 {
-    if (head == NULL)
+    if (node->head == NULL)
     {
         printf("Error: The list is empty\n");
         return -1;
     }
 
-    Node* currentNode = head;
-    Node* tempNode = tail;
+    Node* currentNode = node->head;
+    Node* tempNode = node->tail;
     char removedCharacter = tempNode->data;
 
-    if (head == tail)
+    if (node->head == node->tail)
     {
         // Only one node in the list
-        head = tail = NULL;
+        node->head = node->tail = NULL;
     }
     else
     {
         // Traverse the list to find the second-to-last node
-        while (currentNode->nextNodePtr != tail)
+        while (currentNode->nextNodePtr != node->tail)
         {
             currentNode = currentNode->nextNodePtr;
         }
         // Update tail and free the last node
-        tail = currentNode;
-        tail->nextNodePtr = NULL;
+        node->tail = currentNode;
+        node->tail->nextNodePtr = NULL;
     }
 
     free (tempNode);
-    size--;
+    node->size--;
     return removedCharacter;
 }
 
 //Check if the stack is empty
-int isEmpty ()
+int isEmpty (Node* node) //add Node
 {
-    return size == 0;
-}
-
-//Push items into the stack, check if stack is full
-void push (char data) 
-{
-    addHead (data);
+    return node->size == 0;
 }
 
 //Pop the last item out of the stack and return the popped value
-char pop () 
+char pop (Node* node)
 {
-    if (isEmpty())
+    if (isEmpty (node))
     {
         printf("Error: The list is empty\n");
         return -1;
     }
-    char poppedData = removeHead();
+    char poppedData = removeHead (node);
     return poppedData; //return head->data will cause error cuz what if head->data is NULL, it will return a NULL pointer
 }
 
-//Insert item at the tail
-void enQueue (char data) 
-{
-    addTail (data);
-}
-
 //Remove node at the head
-char deQueue () 
+char deQueue (Node* node) //remove, add them in main
 {
-    if (isEmpty())
+    if (isEmpty (node))
     {
         printf("Error: The list is empty\n"); //why do we need this function, this is the same as pop () lol
         return -1;
     }
-    char poppedData = removeHead();
+    char poppedData = removeHead (node);
     return poppedData; //return head->data will cause error cuz what if head->data is NULL, it will return a NULL pointer
 }
 
 //Return the size of the items in the stack
-int Size ()
+int Size (Node* node) //add Node
 {
-    return size; //why do we need this function lol
+    return node->size; //why do we need this function lol
 }
 
 //Content of the Head stack
-char getFirst ()
+char getFirst (Node* node) //add Node
 {
-    if (isEmpty()) 
+    if (isEmpty (node)) 
     {
         printf("Warning: No item inside the stack.\n");
         return -1;
     }
-    return head->data; //we can return this even if head->data
+    return node->head->data; //we can return this even if head->data
 }
 
 //Content of the Tail stack
-char getLast ()
+char getLast (Node* node) //add Node
 {
-    if (isEmpty()) 
+    if (isEmpty (node)) 
     {
         printf("Warning: No item inside the stack.\n");
         return -1;
     }
-    return tail->data; //we can return this even if tail->data
+    return node->tail->data; //we can return this even if tail->data
 }
 
 //Print the stack like it was viusalize in a push popm way
-void printStack ()
+void printStack (Node* node) //add Node
 {
-    Node* currentNode = head;
+    Node* currentNode = node->head;
     while (currentNode != NULL) 
     {
         printf ("\n| %c |", currentNode->data);
@@ -189,9 +185,9 @@ void printStack ()
 }
 
 //Make the Linked List Empty
-void emptyList() 
+void emptyList (Node* node) //add Node
 {
-   Node* currentNode = head;
+   Node* currentNode = node->head;
    Node* nextNode;
 
    //Assign next to current-> nextNode then delete the current node, repeat until over
@@ -202,11 +198,11 @@ void emptyList()
       currentNode = nextNode;
    }
    //Delete the start node
-   head = NULL;
+   node->head = NULL;
 }
 
 //Bracket Matching function [({})] is good; }{[], ({}] is wrong
-int BracketMatch (char* string, int size)
+int BracketMatch (Node* node, char* string, int size)
 {
     int flag = 0; //use flag instead of return 1, -1 cuz need to free the stack before returning
 
@@ -226,7 +222,7 @@ int BracketMatch (char* string, int size)
             string[i] == '{' || 
             string[i] == '[')
         {
-            push (string[i]);
+            addHead (node, string[i]); //add Node and main
         }
         //if string[i] is a closing grouping symbol then
         else if (string[i] == ')' ||
@@ -234,7 +230,7 @@ int BracketMatch (char* string, int size)
                  string[i] == ']')
         {
             //if the stack is empty return false
-            if (isEmpty()) 
+            if (isEmpty (node)) 
             {
                 printf("Warning: No items in the stack to match with.\n");
                 flag = -1;
@@ -242,7 +238,7 @@ int BracketMatch (char* string, int size)
             }
 
             //If the item of the pop stack does not match the type of string[i] then return false
-            char pop_character = pop(); 
+            char pop_character = pop (node); //add Node and main
             if ((pop_character == '(' && string[i] != ')') ||
                 (pop_character == '{' && string[i] != '}') ||
                 (pop_character == '[' && string[i] != ']'))
@@ -255,7 +251,7 @@ int BracketMatch (char* string, int size)
     }
 
     //if at the end the stack is empty then return true, else the Bracket is not match
-    if (isEmpty() && flag == 0)
+    if (isEmpty (node) && flag == 0) //add Node
     {
         printf("Every symbol matched.\n");
         flag = 1;
@@ -267,7 +263,7 @@ int BracketMatch (char* string, int size)
     }
 
     // Free the memory allocated for the stack
-    emptyList();
+    emptyList (node); //add Node
 
     return flag;
 }
@@ -287,18 +283,18 @@ void menu(void)
     " 9. Content of Bottom Stack.\n"
     " 10. Print Stack .\n"
     " 11. Bracket Matching.\n"
-    " 12. Performance test for Language recognizer.\n"
+    " 12. Bracket Matching.\n"
+    " 13. Performance test for Language recognizer.\n"
     " 0. Exit.\n");
 }
 
 int main() {
     int choice = 0;
-    //Node* node = NULL;
+    Node* node = NULL;
+    node = createNode();
     char data, string[100];
+    Node* nodeBracket = NULL;
 
-    // Creating the starting/ending node.
-    tail = head;
-    
     while (1) 
     {
         menu ();
@@ -310,16 +306,16 @@ int main() {
             case 1:
                 printf ("Enter any word to push in the stack: ");
                 scanf (" %c", &data);
-                push (data);
-                printStack ();
+                addHead (node, data);
+                printStack (node);
                 printf ("\n");
                 break;
             
             //Press 2 to Pop item out of the stack
             case 2:
-                data = pop();
+                data = pop (node);
                 printf("Item Popped out of the stack: %c\n", data);
-                printStack (data);
+                printStack (node);
                 printf("\n");
                 break;
 
@@ -327,30 +323,30 @@ int main() {
             case 3:
                 printf ("Enter any word to enQueue in the stack: ");
                 scanf (" %c", &data);
-                enQueue (data);
-                printStack ();
+                addTail (node, data);
+                printStack (node);
                 printf ("\n");
                 break;
             
             //Press 4 to deQueue item out of the stack
             case 4:
-                data = deQueue();
+                data = deQueue (node);
                 printf("Item deQueue out of the stack: %c\n", data);
-                printStack (data);
+                printStack (node);
                 printf("\n");
                 break;     
 
             //Press 5 to Remove Bottom item out of the stack
             case 5:
-                data = removeTail ();
+                data = removeTail (node);
                 printf("Item at the bottom removed out of the stack: %c\n", data);
-                printStack (data);
+                printStack (node);
                 printf("\n");
                 break;             
 
             //Press 6 to check if stack is empty
             case 6:
-                if (isEmpty())
+                if (isEmpty (node))
                 {
                     printf("The Stack is empty\n");
                 }
@@ -362,21 +358,18 @@ int main() {
 
             //Press 7 to see the current stack size
             case 7:
-                printf("Current size of the Stack is: %d\n", Size());
+                printf("Current size of the Stack is: %d\n", Size (node));
                 break;
 
             //Press 8 to see the content of the tops stack
             case 8:
-                data = getFirst ();
-                if (data != -1) 
-                {
-                    printf("Content of the Top Stack: %c\n", data);
-                }
+                data = getFirst (node);
+                printf("Content of the Top Stack: %c\n", data);
                 break;
 
             //Press 9 to see the content of the tops stack
             case 9:
-                data = getLast ();
+                data = getLast (node);
                 if (data != -1) 
                 {
                     printf("Content of the Bottom Stack: %c\n", data);
@@ -385,12 +378,13 @@ int main() {
             
             //Press 10 to print the whole stack
             case 10:
-                printStack ();
+                printStack (node);
                 printf("\n");
                 break;
 
             //Press 11 to use the Bracket Matching function for a string
             case 11:
+                nodeBracket = createNode();
                 printf("Enter the string with parenthesis: ");
                 
                 //User enter the string, added getchar() to help with the input buffer
@@ -398,7 +392,7 @@ int main() {
                 fgets(string, sizeof(string), stdin);
                 string[strlen(string)-1] = '\0';
 
-                BracketMatch (string ,strlen(string));
+                BracketMatch (nodeBracket, string ,strlen (string));
                 break;
             
             // //Test to see the running time for the function LanguageRecognizer()
@@ -437,7 +431,7 @@ int main() {
                 exit(0);
 
             default:
-                printf("Invalid choice! Please choose from 0 to 9\n");
+                printf ("Invalid choice! Please choose from 0 to 9\n");
         }
     }
     return 0;
