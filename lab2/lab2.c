@@ -254,6 +254,17 @@ void printStack (Node* node)
     }
 }
 
+// Print the stack from head to tail using recursive
+void printStackRecursive(Node* node) //must put head node here or else infinite loop
+{
+    if (node == NULL) 
+    {
+        return; // Base case: if node is NULL, return
+    }
+    printf("\n| %c |", node->data); // Print current node's data
+    printStackRecursive (node->nextNodePtr); // Recur for the next node
+}
+
 //Make the Linked List Empty
 void emptyList (Node* node) 
 {
@@ -402,7 +413,7 @@ void menu(void)
     " 5. Remove Bottom.\n"
     " 6. Check Empty.\t7. Check Size.\n"
     " 8. Top Stack Content.\t9. Bottom Stack Content.\n"
-    " 10. Print Stack .\n"
+    " 10. Print Stack Recursively.\n"
     " 11. Bracket Matching.\n"
     " 12. Merged 2 Sorted List of Integers.\n"
     " 13. Performance test for Merging 2 Sorted List.\n"
@@ -433,7 +444,7 @@ int main() {
                 scanf (" %c", &data);
                 addHead (node, data);
                 printStack (node);
-                //printStackRecursive (node);
+                //printStackRecursive (node->head);
                 printf ("\n");
                 break;
             
@@ -506,10 +517,10 @@ int main() {
                 }
                 break;
             
-            //Press 10 to print the whole stack
+            //Press 10 to print the whole stack recursively
             case 10:
-                printStack (node);
-                //printStackRecursive (node);
+                //printStack (node);
+                printStackRecursive (node->head);
                 printf("\n");
                 break;
 
