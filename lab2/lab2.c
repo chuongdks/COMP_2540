@@ -21,6 +21,7 @@ Node* createNode ()
     return newNode;
 }
 
+//Create a Linked List for the integer type data
 typedef struct Int_Node_struct{
     int data;
     struct Int_Node_struct* nextNodePtr;
@@ -29,7 +30,7 @@ typedef struct Int_Node_struct{
     int size;
 } Int_Node;
 
-// Function to create a new Node
+// Function to create a new Node Int
 Int_Node* createNodeInt () 
 {
     Int_Node* newNode = (Int_Node*) malloc (sizeof(Int_Node));
@@ -54,7 +55,7 @@ void addHead (Node* node, char data) //add Node
 }
 
 //removeHead() function: Remove at the head
-char removeHead (Node* node) //add Node
+char removeHead (Node* node) 
 {
     if (node->head == NULL)
     {
@@ -203,7 +204,7 @@ char pop (Node* node)
 }
 
 //Remove node at the head
-char deQueue (Node* node) //remove, add them in main
+char deQueue (Node* node) 
 {
     if (isEmpty (node))
     {
@@ -215,13 +216,13 @@ char deQueue (Node* node) //remove, add them in main
 }
 
 //Return the size of the items in the stack
-int Size (Node* node) //add Node
+int Size (Node* node) 
 {
-    return node->size; //why do we need this function lol
+    return node->size; 
 }
 
 //Content of the Head stack
-char getFirst (Node* node) //add Node
+char getFirst (Node* node) 
 {
     if (isEmpty (node)) 
     {
@@ -232,7 +233,7 @@ char getFirst (Node* node) //add Node
 }
 
 //Content of the Tail stack
-char getLast (Node* node) //add Node
+char getLast (Node* node) 
 {
     if (isEmpty (node)) 
     {
@@ -242,8 +243,8 @@ char getLast (Node* node) //add Node
     return node->tail->data; //we can return this even if tail->data
 }
 
-//Print the stack like it was viusalize in a push popm way
-void printStack (Node* node) //add Node
+//Print the stack like it was viusalize in a push pop way
+void printStack (Node* node) 
 {
     Node* currentNode = node->head;
     while (currentNode != NULL) 
@@ -254,7 +255,7 @@ void printStack (Node* node) //add Node
 }
 
 //Make the Linked List Empty
-void emptyList (Node* node) //add Node
+void emptyList (Node* node) 
 {
    Node* currentNode = node->head;
    Node* nextNode;
@@ -271,7 +272,7 @@ void emptyList (Node* node) //add Node
 }
 
 //Make the Linked List Empty
-void emptyListInt (Int_Node* node) //add Node
+void emptyListInt (Int_Node* node) 
 {
    Int_Node* currentNode = node->head;
    Int_Node* nextNode;
@@ -324,7 +325,8 @@ int BracketMatch (Node* node, char* string, int size)
             }
 
             //If the item of the pop stack does not match the type of string[i] then return false
-            char pop_character = pop (node); //add Node and main
+            char pop_character = pop (node); 
+
             if ((pop_character == '(' && string[i] != ')') ||
                 (pop_character == '{' && string[i] != '}') ||
                 (pop_character == '[' && string[i] != ']'))
@@ -355,39 +357,40 @@ int BracketMatch (Node* node, char* string, int size)
 }
 
 //Merged 2 Sorted Queue A and Queue B into Queue S
-void mergeSortedQueues(Int_Node* A, Int_Node* B, Int_Node* S) 
+void mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS) 
 {
-    while (!isEmptyInt(A) && !isEmptyInt(B)) 
+    while (!isEmptyInt(queueA) && !isEmptyInt(queueB)) 
     {
-        if (A->head->data <= B->head->data) 
+        //If Front Content of Queue A >= than Queue B, then Enqueue Queue A item to Queue S and Dequeue item from queue A. Vice versa if Queue B > Queue A
+        if (queueA->head->data <= queueB->head->data) 
         {
-            addTailInt (S, A->head->data);
-            removeHeadInt (A);
+            addTailInt (queueS, queueA->head->data);
+            removeHeadInt (queueA);
         } 
         else 
         {
-            addTailInt (S, B->head->data);
-            removeHeadInt (B);
+            addTailInt (queueS, queueB->head->data);
+            removeHeadInt (queueB);
         }
     }
 
-    // Enqueue remaining elements of queue A, if any
-    while (!isEmptyInt(A)) 
+    // Enqueue remaining elements of queue A
+    while (!isEmptyInt(queueA)) 
     {
-        addTailInt (S, A->head->data);
-        removeHeadInt (A);
+        addTailInt (queueS, queueA->head->data);
+        removeHeadInt (queueA);
     }
 
-    // Enqueue remaining elements of queue B, if any
-    while (!isEmptyInt(B)) 
+    // Enqueue remaining elements of queue B
+    while (!isEmptyInt(queueB)) 
     {
-        addTailInt (S, B->head->data);
-        removeHeadInt (B);
+        addTailInt (queueS, queueB->head->data);
+        removeHeadInt (queueB);
     }
 
     // Free memory for queues A and B
-    emptyListInt(A);
-    emptyListInt(B);
+    emptyListInt (queueA);
+    emptyListInt (queueB);
 }
 
 // Display the menu options.
@@ -430,6 +433,7 @@ int main() {
                 scanf (" %c", &data);
                 addHead (node, data);
                 printStack (node);
+                //printStackRecursive (node);
                 printf ("\n");
                 break;
             
@@ -438,6 +442,7 @@ int main() {
                 data = pop (node);
                 printf("Item Popped out of the stack: %c\n", data);
                 printStack (node);
+                //printStackRecursive (node);
                 printf("\n");
                 break;
 
@@ -447,6 +452,7 @@ int main() {
                 scanf (" %c", &data);
                 addTail (node, data);
                 printStack (node);
+                //printStackRecursive (node);
                 printf ("\n");
                 break;
             
@@ -455,6 +461,7 @@ int main() {
                 data = deQueue (node);
                 printf("Item deQueue out of the stack: %c\n", data);
                 printStack (node);
+                //printStackRecursive (node);
                 printf("\n");
                 break;     
 
@@ -463,6 +470,7 @@ int main() {
                 data = removeTail (node);
                 printf("Item at the bottom removed out of the stack: %c\n", data);
                 printStack (node);
+                //printStackRecursive (node);
                 printf("\n");
                 break;             
 
@@ -501,6 +509,7 @@ int main() {
             //Press 10 to print the whole stack
             case 10:
                 printStack (node);
+                //printStackRecursive (node);
                 printf("\n");
                 break;
 
@@ -523,18 +532,6 @@ int main() {
                 queueA = createNodeInt();
                 queueB = createNodeInt();
                 queueS = createNodeInt();
-
-                //printf("Enter the string with parenthesis: ");
-                
-                // //User enter the string, added getchar() to help with the input buffer
-                // getchar();
-                // fgets(stringA, sizeof(stringA), stdin);
-                // stringA[strlen(stringA)-1] = '\0';
-
-                // //User enter the string, added getchar() to help with the input buffer
-                // getchar();
-                // fgets(stringB, sizeof(stringB), stdin);
-                // stringB[strlen(stringB)-1] = '\0';
 
                 // Sample data for lists A and B
                 int listA[] = {10,11,12,13};
@@ -570,8 +567,8 @@ int main() {
 
                 break;
             
-            // //Test to see the running time for the function LanguageRecognizer()
-            // case 9:
+            // //Test to see the running time for the function mergeSortedQueues()
+            // case 13:
             //     // Loop for different string lengths
             //     for (int n = 2; n <= 512*2; n *= 2) //1048576
             //     {
@@ -611,3 +608,22 @@ int main() {
     }
     return 0;
 }
+
+// // FUnction to enter a string and return a bunch of integers based on the ',' 
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+
+// int main () {
+//     int a,b,c,d,e;
+//     char dtm[100];
+    
+//     fgets(dtm, sizeof(dtm), stdin);
+
+//    //strcpy(dtm, "1, 2, 3, 4, 5" );
+//    sscanf(dtm, "%d, %d, %d, %d, %d\n", &a, &b, &c, &d, &e);
+
+//    printf("%d %d %d %d %d", a, b, c, d, e );
+    
+//    return(0);
+// }
