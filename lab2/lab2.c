@@ -191,7 +191,7 @@ int isEmptyInt (Int_Node* node) //add Node
     return node->size == 0;
 }
 
-//Pop the last item out of the stack and return the popped value
+//Pop the last item out of the stack and return the popped value (Redundant)
 char pop (Node* node)
 {
     if (isEmpty (node))
@@ -203,7 +203,7 @@ char pop (Node* node)
     return poppedData; //return head->data will cause error cuz what if head->data is NULL, it will return a NULL pointer
 }
 
-//Remove node at the head
+//Remove node at the head (Redundant)
 char deQueue (Node* node) 
 {
     if (isEmpty (node))
@@ -255,14 +255,15 @@ void printStack (Node* node)
 }
 
 // Print the stack from head to tail using recursive
-void printStackRecursive(Node* node) //must put head node here or else infinite loop
+void printStackRecursive (Node* node) //must put head node here or else infinite loop. Time complexity: O(n^2)
 {
     if (node == NULL) 
     {
         return; // Base case: if node is NULL, return
     }
-    printf("\n| %c |", node->data); // Print current node's data
-    printStackRecursive (node->nextNodePtr); // Recur for the next node
+    //printf("\n| %c |", node->data); // Print current node's data, put this after the function to print in reverse
+    printStackRecursive (node->nextNodePtr); // Recursive function for the next node
+    printf("\n| %c |", node->data); // Print current node's data, put this before the function to print in reverse
 }
 
 //Make the Linked List Empty
@@ -398,11 +399,32 @@ void mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS)
         addTailInt (queueS, queueB->head->data);
         removeHeadInt (queueB);
     }
-
-    // Free memory for queues A and B
-    emptyListInt (queueA);
-    emptyListInt (queueB);
 }
+
+// Function to perform Bubble Sort 
+void arraySort (int arr[], int size) 
+{ 
+    int temp = 0, sizeDivide = size / 2; 
+    // One by one move boundary of unsorted subarray 
+    for (int i = 0; i < sizeDivide - 1; i++) 
+       { 
+        // Find the minimum element in unsorted array 
+        for (int j = 0; j < sizeDivide - i - 1; j++) 
+        {
+            if (arr[j] > arr[j+1])
+            {
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    } 
+    for (int i = 0; i < sizeDivide - 1; i++) 
+    {
+        //Print the sorted array
+        printf("%d ", arr[i]); 
+    }
+} 
 
 // Display the menu options.
 void menu(void) 
@@ -430,7 +452,10 @@ int main() {
     Int_Node* queueA = NULL;
     Int_Node* queueB = NULL;
     Int_Node* queueS = NULL;
-    
+
+    // Initialize sizes for queues A and B
+    int sizes[] = {100}; //200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200};
+
     while (1) 
     {
         menu ();
@@ -539,16 +564,16 @@ int main() {
 
             //Press 11 to use the Bracket Matching function for a string
             case 12:
-                // Initialize queues
+                //Initialize queues
                 queueA = createNodeInt();
                 queueB = createNodeInt();
                 queueS = createNodeInt();
 
-                // Sample data for lists A and B
-                int listA[] = {10,11,12,13};
-                int listB[] = {1,2,3,4};
+                //Sample data for lists A and B
+                int listA[] = {2,4,8,16,32};
+                int listB[] = {1,1,3,5,7,9};
 
-                // Enqueue elements from lists A and B into their respective queues
+                //Enqueue elements from lists A and B into their respective queues
                 for (int i = 0; i < sizeof(listA) / sizeof(listA[0]) ; i++)
                 {
                     addTailInt (queueA, listA[i]);
@@ -560,10 +585,10 @@ int main() {
                 }
                 
 
-                // Merge queues A and B into queue S
+                //Merge queues A and B into queue S
                 mergeSortedQueues (queueA, queueB, queueS);
 
-                // Print the merged queue S
+                //Print the merged queue S by DeQueue the Node
                 printf("Merged Queue S: ");
                 while (!isEmptyInt (queueS)) 
                 {
@@ -571,43 +596,74 @@ int main() {
                 }
                 printf("\n");
 
-                // Free memory allocated to queues
-                free(queueA);
-                free(queueB);
-                free(queueS);
+                // Free memory for queues
+                emptyListInt (queueA);
+                emptyListInt (queueB);
+                emptyListInt (queueS);
 
                 break;
             
-            // //Test to see the running time for the function mergeSortedQueues()
-            // case 13:
-            //     // Loop for different string lengths
-            //     for (int n = 2; n <= 512*2; n *= 2) //1048576
-            //     {
-            //         char* stringBig = (char*)malloc((n + 1) * sizeof(char)); // Allocate memory for the string
-            //         Stack* stack = Create_Stack (n);
+            //Test to see the running time for the function mergeSortedQueues()
+            case 13:
+                // Loop through different sizes of lists
+                for (int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) 
+                {
+                    // Create queues with current size
+                    queueA = createNodeInt();
+                    queueB = createNodeInt();
+                    queueS = createNodeInt();
 
-            //         // Fill the 1st half with '0'
-            //         for (int i = 0; i < n/2; ++i) 
-            //         {
-            //             stringBig[i] = '0';
-            //         }
-            //         // Fill the 2nd half with '1'
-            //         for (int i = n/2; i < n; ++i) 
-            //         {
-            //             stringBig[i] = '1';
-            //         }
-            //         stringBig[n] = '\0'; // Null-terminate the last array of the string
+                    // Generate sorted lists A and B with random data
+                    int* listA = (int*) malloc (sizes[i] * sizeof(int));
+                    int* listB = (int*) malloc (sizes[i] * sizeof(int));
 
-            //         printf("\nRunning Language Recognizer function with n = %d\n", n);
-            //         printf("%s\n", stringBig); //remove comment to see the string
+                    // Fill lists A and B with random sorted data
+                    for (int j = 0; j < sizes[i]; j++) 
+                    {
+                        listA[j] = rand() % 101; //Range from 1 - 100
+                        listB[j] = rand() % 101; //Range from 1 - 100
+                    }
+                    // Sorting lists A and B 
+                    arraySort (listA, sizes[i]);
+                    arraySort (listB, sizes[i]);
 
-            //         // Run the LanguageRecognizer function and measure the time
-            //         LanguageRecognizer(stringBig, n);
+                    // Enqueue elements from lists A and B into their respective queues
+                    for (int j = 0; j < sizes[i]; j++) 
+                    {
+                        addTailInt(queueA, listA[j]);
+                        addTailInt(queueB, listB[j]);
+                    }
 
-            //         // Free the memory allocated for the stringBig
-            //         free(stringBig);
-            //     }
-            //     break;
+                    // Start measuring time
+                    clock_t start_time = clock();
+
+                    // Merge queues A and B into queue S
+                    mergeSortedQueues (queueA, queueB, queueS);
+
+                    // Stop measuring time
+                    clock_t end_time = clock();
+                    // Calculate elapsed time in nanoseconds
+                    double elapsed_time_ns = ((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1e9;
+                    // Print the elapsed time
+                    printf("Elapsed Time: %.2f nanoseconds\n", elapsed_time_ns);
+                    
+                    //Print the merged queue S by DeQueue the Node
+                    printf("Merged Queue S: ");
+                    while (!isEmptyInt (queueS)) 
+                    {
+                        printf("%d ", removeHeadInt (queueS));
+                    }
+                    printf("\n");
+
+                    // Free memory for queues and lists
+                    emptyListInt (queueA);
+                    emptyListInt (queueB);
+                    emptyListInt (queueS);
+                    free (listA);
+                    free (listB);
+                }
+                
+                break;
 
             //Press 0 to exit the program
             case 0:
@@ -620,7 +676,7 @@ int main() {
     return 0;
 }
 
-// // FUnction to enter a string and return a bunch of integers based on the ',' 
+// // Function to enter a string and return a bunch of integers based on the ',' 
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <string.h>
