@@ -255,15 +255,27 @@ void printStack (Node* node)
 }
 
 // Print the stack from head to tail using recursive
-void printStackRecursive (Node* node) //must put head node here or else infinite loop. Time complexity: O(n^2)
+void printStackRecursive (Node* node) //must put head node in the argument when using this function or else infinite loop. Time complexity: O(n^2)
 {
     if (node == NULL) 
     {
         return; // Base case: if node is NULL, return
     }
-    //printf("\n| %c |", node->data); // Print current node's data, put this after the function to print in reverse
+    printf("\n| %c |", node->data); // Print current node's data, put this after the function to print in reverse
     printStackRecursive (node->nextNodePtr); // Recursive function for the next node
-    printf("\n| %c |", node->data); // Print current node's data, put this before the function to print in reverse
+    //printf("\n| %c |", node->data); // Print current node's data, put this before the function to print in order
+}
+
+// Print the stack from head to tail using recursive
+void printStackRecursiveInt (Int_Node* node) //must put head node in the argument when using this function or else infinite loop. Time complexity: O(n^2)
+{
+    if (node == NULL) 
+    {
+        return; // Base case: if node is NULL, return
+    }
+    printf("\n| %d |", node->data); // Print current node's data, put this after the function to print in reverse
+    printStackRecursiveInt (node->nextNodePtr); // Recursive function for the next node
+    //printf("\n| %c |", node->data); // Print current node's data, put this before the function to print in order
 }
 
 //Make the Linked List Empty
@@ -454,7 +466,7 @@ int main() {
     Int_Node* queueS = NULL;
 
     // Initialize sizes for queues A and B
-    int sizes[] = {100, 200}; //100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200};
+    int sizes[10] = {100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200}; //100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200};
 
     while (1) 
     {
@@ -482,7 +494,7 @@ int main() {
                 printf("\n");
                 break;
 
-            //Press 3 to let user enter new item and push it in the stack, you can press 1 *string here* to push a bunch of char at the same time
+            //Press 3 to let user enter new item and enQueue it in the stack, you can press 1 *string here* to enQueue a bunch of char at the same time
             case 3:
                 printf ("Enter any word to enQueue in the stack: ");
                 scanf (" %c", &data);
@@ -570,8 +582,8 @@ int main() {
                 queueS = createNodeInt();
 
                 //Sample data for lists A and B
-                int listA[] = {1,2,5,7,9,12,13,14,15,16,17,18,19,21,40,52,60};
-                int listB[] = {0,3,4,6,8,10,11,20,22,23,24,26,28,30,31,34,35};
+                int listA[] = {10,11,12,13};
+                int listB[] = {1,2,3,45};
 
                 //Enqueue elements from lists A and B into their respective queues
                 for (int i = 0; i < sizeof(listA) / sizeof(listA[0]) ; i++)
@@ -587,6 +599,10 @@ int main() {
 
                 //Merge queues A and B into queue S
                 mergeSortedQueues (queueA, queueB, queueS);
+
+                //Print the merged queue S by using the recursive algorithm
+                printStackRecursiveInt (queueS->head);
+                printf("\n");
 
                 //Print the merged queue S by DeQueue the Node
                 printf("Merged Queue S: ");
@@ -606,7 +622,7 @@ int main() {
             //Test to see the running time for the function mergeSortedQueues()
             case 13:
                 // Loop through different sizes of lists
-                for (int i = 0; i < 100; i++) //sizeof(sizes) / sizeof(sizes[0])
+                for (int i = 0; i < 10; i++) //sizeof(sizes) / sizeof(sizes[0])
                 {
                     printf("Size of n: %d\n", sizes[i]);
                     // Start measuring time
@@ -683,7 +699,7 @@ int main() {
     return 0;
 }
 
-// // Function to enter a string and return a bunch of integers based on the ',' 
+// // Function to enter a string and return a bunch of integers based on the ',', use for entering list of intergers but have to put all of these in an array or sthing
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <string.h>
