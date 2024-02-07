@@ -404,12 +404,12 @@ void mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS)
 // Function to perform Bubble Sort 
 void arraySort (int arr[], int size) 
 { 
-    int temp = 0, sizeDivide = size / 2; 
+    int temp = 0;; 
     // One by one move boundary of unsorted subarray 
-    for (int i = 0; i < sizeDivide - 1; i++) 
+    for (int i = 0; i < size; i++) 
        { 
         // Find the minimum element in unsorted array 
-        for (int j = 0; j < sizeDivide - i - 1; j++) 
+        for (int j = 0; j < size - i; j++) 
         {
             if (arr[j] > arr[j+1])
             {
@@ -419,7 +419,7 @@ void arraySort (int arr[], int size)
             }
         }
     } 
-    for (int i = 0; i < sizeDivide - 1; i++) 
+    for (int i = 0; i < size; i++) 
     {
         //Print the sorted array
         printf("%d ", arr[i]); 
@@ -454,7 +454,7 @@ int main() {
     Int_Node* queueS = NULL;
 
     // Initialize sizes for queues A and B
-    int sizes[] = {100}; //200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200};
+    int sizes[] = {100, 200}; //100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200};
 
     while (1) 
     {
@@ -570,8 +570,8 @@ int main() {
                 queueS = createNodeInt();
 
                 //Sample data for lists A and B
-                int listA[] = {2,4,8,16,32};
-                int listB[] = {1,1,3,5,7,9};
+                int listA[] = {1,2,5,7,9,12,13,14,15,16,17,18,19,21,40,52,60};
+                int listB[] = {0,3,4,6,8,10,11,20,22,23,24,26,28,30,31,34,35};
 
                 //Enqueue elements from lists A and B into their respective queues
                 for (int i = 0; i < sizeof(listA) / sizeof(listA[0]) ; i++)
@@ -606,16 +606,24 @@ int main() {
             //Test to see the running time for the function mergeSortedQueues()
             case 13:
                 // Loop through different sizes of lists
-                for (int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) 
+                for (int i = 0; i < 100; i++) //sizeof(sizes) / sizeof(sizes[0])
                 {
+                    printf("Size of n: %d\n", sizes[i]);
+                    // Start measuring time
+                    clock_t start_time = clock();
+
                     // Create queues with current size
                     queueA = createNodeInt();
                     queueB = createNodeInt();
                     queueS = createNodeInt();
 
+                    // // Generate sorted lists A and B with random data
+                    // int* listA = (int*) malloc (sizes[i] * sizeof(int));
+                    // int* listB = (int*) malloc (sizes[i] * sizeof(int));
+
                     // Generate sorted lists A and B with random data
-                    int* listA = (int*) malloc (sizes[i] * sizeof(int));
-                    int* listB = (int*) malloc (sizes[i] * sizeof(int));
+                    int listA[sizes[i]];
+                    int listB[sizes[i]];
 
                     // Fill lists A and B with random sorted data
                     for (int j = 0; j < sizes[i]; j++) 
@@ -623,8 +631,11 @@ int main() {
                         listA[j] = rand() % 101; //Range from 1 - 100
                         listB[j] = rand() % 101; //Range from 1 - 100
                     }
+
                     // Sorting lists A and B 
+                    printf("Sorted List A:\n");
                     arraySort (listA, sizes[i]);
+                    printf("\nSorted List B:\n");
                     arraySort (listB, sizes[i]);
 
                     // Enqueue elements from lists A and B into their respective queues
@@ -634,9 +645,6 @@ int main() {
                         addTailInt(queueB, listB[j]);
                     }
 
-                    // Start measuring time
-                    clock_t start_time = clock();
-
                     // Merge queues A and B into queue S
                     mergeSortedQueues (queueA, queueB, queueS);
 
@@ -644,23 +652,22 @@ int main() {
                     clock_t end_time = clock();
                     // Calculate elapsed time in nanoseconds
                     double elapsed_time_ns = ((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1e9;
-                    // Print the elapsed time
-                    printf("Elapsed Time: %.2f nanoseconds\n", elapsed_time_ns);
                     
                     //Print the merged queue S by DeQueue the Node
-                    printf("Merged Queue S: ");
+                    printf("\nMerged Queue S: ");
                     while (!isEmptyInt (queueS)) 
                     {
                         printf("%d ", removeHeadInt (queueS));
                     }
                     printf("\n");
 
+                    // Print the elapsed time
+                    printf("\nElapsed Time for size %d: %.2f nanoseconds\n\n", sizes[i], elapsed_time_ns);
+
                     // Free memory for queues and lists
                     emptyListInt (queueA);
                     emptyListInt (queueB);
                     emptyListInt (queueS);
-                    free (listA);
-                    free (listB);
                 }
                 
                 break;
