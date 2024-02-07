@@ -82,7 +82,7 @@ char removeHead (Node* node)
 }
 
 //removeHead() function: Remove at the head
-char removeHeadInt (Int_Node* node) //add Node
+int removeHeadInt (Int_Node* node) //add Node
 {
     if (node->head == NULL)
     {
@@ -90,7 +90,7 @@ char removeHeadInt (Int_Node* node) //add Node
     }
 
     Int_Node* tempNode = node->head;
-    char removedData = tempNode->data;
+    int removedData = tempNode->data;
 
     if (node->head == node->tail)
     {
@@ -431,11 +431,12 @@ void arraySort (int arr[], int size)
             }
         }
     } 
-    for (int i = 0; i < size; i++) 
-    {
-        //Print the sorted array
-        printf("%d ", arr[i]); 
-    }
+
+    // //Print the sorted array, uncomment below to see
+    // for (int i = 0; i < size; i++) 
+    // {
+    //     printf("%d ", arr[i]); 
+    // }
 } 
 
 // Display the menu options.
@@ -596,7 +597,6 @@ int main() {
                     addTailInt (queueB, listB[i]);
                 }
                 
-
                 //Merge queues A and B into queue S
                 mergeSortedQueues (queueA, queueB, queueS);
 
@@ -634,8 +634,8 @@ int main() {
                     queueS = createNodeInt();
 
                     // // Generate sorted lists A and B with random data
-                    // int* listA = (int*) malloc (sizes[i] * sizeof(int));
-                    // int* listB = (int*) malloc (sizes[i] * sizeof(int));
+                    // int* listA = (int*) malloc (sizes[i]+1 * sizeof(int));
+                    // int* listB = (int*) malloc (sizes[i]+1 * sizeof(int));
 
                     // Generate sorted lists A and B with random data
                     int listA[sizes[i]];
@@ -644,8 +644,8 @@ int main() {
                     // Fill lists A and B with random sorted data
                     for (int j = 0; j < sizes[i]; j++) 
                     {
-                        listA[j] = rand() % 101; //Range from 1 - 100
-                        listB[j] = rand() % 101; //Range from 1 - 100
+                        listA[j] = rand() % 51201; //Range from 0 - 51200
+                        listB[j] = rand() % 51201; //Range from 0 - 51200
                     }
 
                     // Sorting lists A and B 
