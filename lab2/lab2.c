@@ -669,13 +669,13 @@ int main() {
                     // Calculate elapsed time in nanoseconds
                     double elapsed_time_ns = ((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1e9;
                     
-                    //Print the merged queue S by DeQueue the Node
-                    printf("\nMerged Queue S: ");
-                    while (!isEmptyInt (queueS)) 
-                    {
-                        printf("%d ", removeHeadInt (queueS));
-                    }
-                    printf("\n");
+                    // //Print the merged queue S by DeQueue the Node
+                    // printf("\nMerged Queue S: ");
+                    // while (!isEmptyInt (queueS)) 
+                    // {
+                    //     printf("%d ", removeHeadInt (queueS));
+                    // }
+                    // printf("\n");
 
                     // Print the elapsed time
                     printf("\nElapsed Time for size %d: %.2f nanoseconds\n\n", sizes[i], elapsed_time_ns);
