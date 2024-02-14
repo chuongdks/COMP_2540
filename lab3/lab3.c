@@ -40,7 +40,7 @@ void insertionSort (int arr[], int size)
 	}
 }
 
-// function to find the partition position in the Quick Sort
+// Function to find the partition position in the Quick Sort
 void quickSort (int array[], int low, int high) 
 {
     if (low < high) 
@@ -64,6 +64,8 @@ void quickSort (int array[], int low, int high)
                 swap (&array[leftIndex], &array[rightIndex]);
             }
         }
+
+        // relocate the pivot, after the line below, the left side has # less than pivot, and the right side has # larger than pivot
         swap (&array[leftIndex], &array[high]);
 
         // recursive call on the left of pivot
@@ -230,18 +232,6 @@ void arraySort (int arr[], int size)
     // }
 } 
 
-// Merge Sort function
-void mergeSort (Int_Node* queueS, int low, int high) 
-{
-    if (low < high) 
-    {
-        int mid = low + (high - low) / 2;
-        mergeSort (queueS, low, mid);
-        mergeSort (queueS, mid + 1, high);
-        mergeSortedQueues (arr, low, mid, high);
-    }
-}
-
 // Display the menu options.
 void menu(void) 
 {
@@ -257,7 +247,12 @@ void menu(void)
 int main() {
     int choice;
     // int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    int size = sizeof(arr) / sizeof(arr[0]);
+    int arr1[] = {10, 8, 9, 7, 2, 5, 3, 1, 6, 4};
+    int arr2[] = {1, 2, 4, 5, 3, 7, 8, 10, 11, 9, 6};
+    int listS[] = {1, 10, 4, 5, 3, 7, 8, 2, 11, 9, 6};
+    int size1 = sizeof(arr1) / sizeof(arr1[0]);
+    int size2 = sizeof(arr2) / sizeof(arr2[0]);
+    int size3 = sizeof(listS) / sizeof(listS[0]);
 
     Int_Node* queueS = NULL;
     
@@ -270,30 +265,26 @@ int main() {
         {
             //Press 1 to use Insertion Sort Algorithm
             case 1:
-                int arr1[] = {10, 8, 9, 7, 2, 5, 3, 1, 6, 4};
-
                 printf("Unsorted Array\n");
-                printArray(arr, size);
+                printArray(arr1, size1);
 
                 // Perform Insertion Sort 
-                insertionSort(arr, size);
+                insertionSort(arr1, size1);
 
                 printf ("Sorted array in ascending order using Insertion Sort: \n");
-                printArray(arr, size);
+                printArray(arr1, size1);
                 break;
             
             //Press 2 to use Quick Sort Algorithm
             case 2:
-                int arr[] = {1, 2, 4, 5, 3, 7, 8, 10, 11, 9, 6};
-
                 printf("Unsorted Array\n");
-                printArray(arr, size);
+                printArray(arr2, size2);
 
                 // Perform Quick Sort 
-                quickSort (arr, 0, size - 1);
+                quickSort (arr2, 0, size2 - 1);
 
                 printf ("Sorted array in ascending order using Quick Sort: \n");
-                printArray (arr, size);
+                printArray (arr2, size2);
                 break;
 
             //Press 3 to use Merged Sort Algorithm
@@ -301,7 +292,7 @@ int main() {
                 queueS = createNodeInt();
 
                 //Sample data for lists A and B
-                int listS[] = {1, 10, 4, 5, 3, 7, 8, 2, 11, 9, 6};
+                
 
                 //Enqueue elements from lists A and B into their respective queues
                 for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
@@ -310,7 +301,7 @@ int main() {
                 }
                 
                 // Perform Quick Sort 
-                mergeSort (arr, 0, size - 1);
+                // mergeSort (arr, 0, size - 1);
 
                 break;    
 
