@@ -3,8 +3,26 @@
 #include <string.h>
 #include <time.h>
 
+// Function to swap elements
+void swap (int *a, int *b) 
+{
+  int temp = *a;
+  *a = *b;
+  *b = temp;
+}
+
+// Function to print array elements
+void printArray (int array[], int size) 
+{
+    for (int i = 0; i < size; ++i) 
+    {
+        printf("%d  ", array[i]);
+    }
+    printf("\n");
+}
+
 // Function to sort an array using insertion sort
-void insertionSort(int arr[], int n)
+void insertionSort (int arr[], int n)
 {
 	int i, key, j;
 	for (i = 1; i < n; i++) 
@@ -22,36 +40,57 @@ void insertionSort(int arr[], int n)
 	}
 }
 
-// A utility function to print an array of size n
-void printArray(int arr[], int n)
+// function to find the partition position in the Quick Sort
+void quickSortTest (int array[], int low, int high) 
 {
-	int i;
-	for (i = 0; i < n; i++)
-		printf("%d ", arr[i]);
-	printf("\n");
-}
+    if (low < high) 
+    {
+        int pivot = array[high];
+        int leftIndex = low;
+        int rightIndex = high - 1;
+        
+        while (leftIndex <= rightIndex)
+        {
+            while ( (leftIndex <= rightIndex) && (array[leftIndex] <= pivot) )
+            {
+                leftIndex += 1;
+            }
+            while ( (leftIndex <= rightIndex) && (array[rightIndex] >= pivot) )
+            {
+                rightIndex -= 1;
+            }
+            if (leftIndex < rightIndex)
+            {
+                swap (&array[leftIndex], &array[rightIndex]);
+            }
+        }
+        swap (&array[leftIndex], &array[high]);
 
+        // recursive call on the left of pivot
+        quickSortTest (array, low, leftIndex - 1);
+
+        // recursive call on the right of pivot
+        quickSortTest (array, leftIndex + 1, high);
+    }
+}
 
 // Display the menu options.
 void menu(void) 
 {
     puts("\nEnter your choice:\n"
     " 1. Insertion-Sort.\n"
-    " 2. Pop.\n"
-    " 3. Check Empty.\n"
+    " 2. Quick Sort.\n"
+    " 3. Merged Sort.\n"
     " 4. Check Size.\n"
-    " 5. Content of Top Stack.\n"
-    " 6. Print Stack .\n"
-    " 7. Bracket Matching.\n"
-    " 8. Language recognizer.\n"
     " 9. Performance test for Language recognizer.\n"
     " 0. Exit.\n");
 }
 
 int main() {
     int choice;
-    int arr[] = { 1, 2, 4, 5, 3, 7, 8, 10, 11, 9, 6 };
+    int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     int n = sizeof(arr) / sizeof(arr[0]);
+
     while (1) 
     {
         menu ();
@@ -59,19 +98,29 @@ int main() {
 
         switch (choice) 
         {
-            //Press 1 to let user enter new item and push it in the stack, you can press 1 *string here* to push a bunch of char at the same time
+            //Press 1 to 
             case 1:
+                printf("Unsorted Array\n");
+                printArray(arr, n);
+
+                // Perform Insertion Sort 
                 insertionSort(arr, n);
+
+                printf ("Sorted array in ascending order using Insertion Sort: \n");
                 printArray(arr, n);
                 break;
             
-            // //Press 2 to Pop item out of the stack
-            // case 2:
-            //     items = pop (stack);
-            //     printf("Item Popped out of the stack: %c\n", items);
-            //     printStack (stack);
-            //     printf("\n");
-            //     break;
+            //Press 2 to 
+            case 2:
+                printf("Unsorted Array\n");
+                printArray(arr, n);
+
+                // Perform Quick Sort 
+                quickSortTest (arr, 0, n - 1);
+
+                printf ("Sorted array in ascending order using Quick Sort: \n");
+                printArray (arr, n);
+                break;
 
             case 0:
                 exit(0);
