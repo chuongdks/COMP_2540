@@ -22,10 +22,10 @@ void printArray (int array[], int size)
 }
 
 // Function to do Insertion sort (Like how u sort a poker card on your handm left to right, put lowest on the left and continue right)
-void insertionSort (int arr[], int n)
+void insertionSort (int arr[], int size)
 {
 	int i, key, j;
-	for (i = 1; i < n; i++) 
+	for (i = 1; i < size; i++) 
     {
 		key = arr[i]; // Store the next element to be compared to a temporary variable named key
 		j = i - 1; // Check the element to the left of the key element index
@@ -67,10 +67,10 @@ void quickSort (int array[], int low, int high)
         swap (&array[leftIndex], &array[high]);
 
         // recursive call on the left of pivot
-        quickSortTest (array, low, leftIndex - 1);
+        quickSort (array, low, leftIndex - 1);
 
         // recursive call on the right of pivot
-        quickSortTest (array, leftIndex + 1, high);
+        quickSort (array, leftIndex + 1, high);
     }
 }
 
@@ -173,6 +173,75 @@ void emptyListInt (Int_Node* node)
    node->head = NULL;
 }
 
+//Merged 2 Sorted Queue A and Queue B into Queue S
+void mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS) 
+{
+    while (!isEmptyInt(queueA) && !isEmptyInt(queueB)) 
+    {
+        //If Front Content of Queue A >= than Queue B, then Enqueue Queue A item to Queue S and Dequeue item from queue A. Vice versa if Queue B > Queue A
+        if (queueA->head->data <= queueB->head->data) 
+        {
+            addTailInt (queueS, queueA->head->data);
+            removeHeadInt (queueA);
+        } 
+        else 
+        {
+            addTailInt (queueS, queueB->head->data);
+            removeHeadInt (queueB);
+        }
+    }
+
+    // Enqueue remaining elements of queue A
+    while (!isEmptyInt(queueA)) 
+    {
+        addTailInt (queueS, queueA->head->data);
+        removeHeadInt (queueA);
+    }
+
+    // Enqueue remaining elements of queue B
+    while (!isEmptyInt(queueB)) 
+    {
+        addTailInt (queueS, queueB->head->data);
+        removeHeadInt (queueB);
+    }
+}
+
+// Function to perform Bubble Sort 
+void arraySort (int arr[], int size) 
+{ 
+    int temp = 0;; 
+    // One by one move boundary of unsorted subarray 
+    for (int i = 0; i < size; i++) 
+    { 
+        // Find the minimum element in unsorted array 
+        for (int j = 0; j < size - i; j++) 
+        {
+            if (arr[j] > arr[j+1])
+            {
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    } 
+    // //Print the sorted array, uncomment below to see
+    // for (int i = 0; i < size; i++) {
+    //     printf("%d ", arr[i]); 
+    // }
+} 
+
+// Merge Sort function
+void mergeSort (Int_Node* queueS, int low, int high) 
+{
+    if (low < high) 
+    {
+        int mid = low + (high - low) / 2;
+        mergeSort (queueS, low, mid);
+        mergeSort (queueS, mid + 1, high);
+        mergeSortedQueues (arr, low, mid, high);
+    }
+}
+
 // Display the menu options.
 void menu(void) 
 {
@@ -180,16 +249,18 @@ void menu(void)
     " 1. Insertion-Sort.\n"
     " 2. Quick Sort.\n"
     " 3. Merged Sort.\n"
-    " 4. Check Size.\n"
-    " 9. Performance test for Language recognizer.\n"
+    " 4. Performance test for Language recognizer.\n"
+    " 5. Print in Reverse\n"
     " 0. Exit.\n");
 }
 
 int main() {
     int choice;
-    int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    // int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    int size = sizeof(arr) / sizeof(arr[0]);
 
+    Int_Node* queueS = NULL;
+    
     while (1) 
     {
         menu ();
@@ -197,29 +268,51 @@ int main() {
 
         switch (choice) 
         {
-            //Press 1 to 
+            //Press 1 to use Insertion Sort Algorithm
             case 1:
+                int arr1[] = {10, 8, 9, 7, 2, 5, 3, 1, 6, 4};
+
                 printf("Unsorted Array\n");
-                printArray(arr, n);
+                printArray(arr, size);
 
                 // Perform Insertion Sort 
-                insertionSort(arr, n);
+                insertionSort(arr, size);
 
                 printf ("Sorted array in ascending order using Insertion Sort: \n");
-                printArray(arr, n);
+                printArray(arr, size);
                 break;
             
-            //Press 2 to 
+            //Press 2 to use Quick Sort Algorithm
             case 2:
+                int arr[] = {1, 2, 4, 5, 3, 7, 8, 10, 11, 9, 6};
+
                 printf("Unsorted Array\n");
-                printArray(arr, n);
+                printArray(arr, size);
 
                 // Perform Quick Sort 
-                quickSort (arr, 0, n - 1);
+                quickSort (arr, 0, size - 1);
 
                 printf ("Sorted array in ascending order using Quick Sort: \n");
-                printArray (arr, n);
+                printArray (arr, size);
                 break;
+
+            //Press 3 to use Merged Sort Algorithm
+            case 3:
+                queueS = createNodeInt();
+
+                //Sample data for lists A and B
+                int listS[] = {1, 10, 4, 5, 3, 7, 8, 2, 11, 9, 6};
+
+                //Enqueue elements from lists A and B into their respective queues
+                for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
+                {
+                    addTailInt (queueS, listS[i]);
+                }
+                
+                // Perform Quick Sort 
+                mergeSort (arr, 0, size - 1);
+
+                break;    
 
             case 0:
                 exit(0);
