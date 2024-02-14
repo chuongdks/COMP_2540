@@ -21,7 +21,7 @@ void printArray (int array[], int size)
     printf("\n");
 }
 
-// Function to sort an array using insertion sort
+// Function to do Insertion sort (Like how u sort a poker card on your handm left to right, put lowest on the left and continue right)
 void insertionSort (int arr[], int n)
 {
 	int i, key, j;
@@ -41,7 +41,7 @@ void insertionSort (int arr[], int n)
 }
 
 // function to find the partition position in the Quick Sort
-void quickSortTest (int array[], int low, int high) 
+void quickSort (int array[], int low, int high) 
 {
     if (low < high) 
     {
@@ -72,6 +72,105 @@ void quickSortTest (int array[], int low, int high)
         // recursive call on the right of pivot
         quickSortTest (array, leftIndex + 1, high);
     }
+}
+
+//Create a Linked List for the integer type data
+typedef struct Int_Node_struct{
+    int data;
+    struct Int_Node_struct* nextNodePtr;
+    struct Int_Node_struct* head;
+    struct Int_Node_struct* tail;
+    int size;
+} Int_Node;
+
+// Function to create a new Node Int
+Int_Node* createNodeInt () 
+{
+    Int_Node* newNode = (Int_Node*) malloc (sizeof(Int_Node));
+    newNode->head = NULL;
+    newNode->tail = NULL;
+    newNode->size = 0;
+    return newNode;
+}
+
+//removeHead() function: Remove at the head
+int removeHeadInt (Int_Node* node) //add Node
+{
+    if (node->head == NULL)
+    {
+        printf("Error: The list is empty\n");
+    }
+
+    Int_Node* tempNode = node->head;
+    int removedData = tempNode->data;
+
+    if (node->head == node->tail)
+    {
+        // Only one node in the list
+        node->head = node->tail = NULL;
+    }
+    else
+    {
+        node->head = node->head->nextNodePtr;
+        tempNode->nextNodePtr = NULL;
+    }
+    
+    free (tempNode);
+    node->size--;
+    return removedData;
+}
+
+//addTail() function: Insert at the tail
+void addTailInt (Int_Node* node, int data) //add Node
+{
+    Int_Node* newNodeTail = (Int_Node*) malloc (sizeof(Int_Node));
+    newNodeTail->data = data;
+    newNodeTail->nextNodePtr = NULL;
+    if (node->tail == NULL) //if no node has been added yet
+    {
+        node->head = node->tail = newNodeTail;
+    }
+    else
+    {
+        node->tail->nextNodePtr = newNodeTail;
+        node->tail = newNodeTail;
+    }
+    node->size++;
+}
+
+//Check if the stack is empty
+int isEmptyInt (Int_Node* node) //add Node
+{
+    return node->size == 0;
+}
+
+// Print the stack from head to tail using recursive
+void printStackRecursiveInt (Int_Node* node) //must put head node in the argument when using this function or else infinite loop. Time complexity: O(n^2)
+{
+    if (node == NULL) 
+    {
+        return; // Base case: if node is NULL, return
+    }
+    printf("\n| %d |", node->data); // Print current node's data, put this after the function to print in reverse
+    printStackRecursiveInt (node->nextNodePtr); // Recursive function for the next node
+    //printf("\n| %c |", node->data); // Print current node's data, put this before the function to print in order
+}
+
+//Make the Linked List Empty
+void emptyListInt (Int_Node* node) 
+{
+   Int_Node* currentNode = node->head;
+   Int_Node* nextNode;
+
+   //Assign next to current-> nextNode then delete the current node, repeat until over
+   while (currentNode != NULL) 
+   {
+      nextNode = currentNode->nextNodePtr;
+      free (currentNode);
+      currentNode = nextNode;
+   }
+   //Delete the start node
+   node->head = NULL;
 }
 
 // Display the menu options.
@@ -116,7 +215,7 @@ int main() {
                 printArray(arr, n);
 
                 // Perform Quick Sort 
-                quickSortTest (arr, 0, n - 1);
+                quickSort (arr, 0, n - 1);
 
                 printf ("Sorted array in ascending order using Quick Sort: \n");
                 printArray (arr, n);
