@@ -40,7 +40,7 @@ void insertionSort (int arr[], int size)
 	}
 }
 
-// Function to find the partition position in the Quick Sort
+// Function to find the partition position in the Quick Sort. If the pivot is the biggest or the smallest, it will take O(n^2) time complexity
 void quickSort (int array[], int low, int high) 
 {
     if (low < high) 
@@ -76,7 +76,7 @@ void quickSort (int array[], int low, int high)
     }
 }
 
-//Create a Linked List for the integer type data
+// Create a Linked List for the integer type data
 typedef struct Int_Node_struct{
     int data;
     struct Int_Node_struct* nextNodePtr;
@@ -95,7 +95,7 @@ Int_Node* createNodeInt ()
     return newNode;
 }
 
-//removeHead() function: Remove at the head
+// removeHead() function: Remove at the head
 int removeHeadInt (Int_Node* node) //add Node
 {
     if (node->head == NULL)
@@ -122,7 +122,7 @@ int removeHeadInt (Int_Node* node) //add Node
     return removedData;
 }
 
-//addTail() function: Insert at the tail
+// addTail() function: Insert at the tail
 void addTailInt (Int_Node* node, int data) //add Node
 {
     Int_Node* newNodeTail = (Int_Node*) malloc (sizeof(Int_Node));
@@ -140,7 +140,7 @@ void addTailInt (Int_Node* node, int data) //add Node
     node->size++;
 }
 
-//Check if the stack is empty
+// Check if the stack is empty
 int isEmptyInt (Int_Node* node) //add Node
 {
     return node->size == 0;
@@ -158,7 +158,7 @@ void printStackRecursiveInt (Int_Node* node) //must put head node in the argumen
     //printf("\n| %c |", node->data); // Print current node's data, put this before the function to print in order
 }
 
-//Make the Linked List Empty
+// Make the Linked List Empty
 void emptyListInt (Int_Node* node) 
 {
    Int_Node* currentNode = node->head;
@@ -175,8 +175,8 @@ void emptyListInt (Int_Node* node)
    node->head = NULL;
 }
 
-//Merged 2 Sorted Queue A and Queue B into Queue S
-void mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS) 
+// Merged 2 Sorted Queue A and Queue B into Queue S
+Int_Node* mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS) 
 {
     while (!isEmptyInt(queueA) && !isEmptyInt(queueB)) 
     {
@@ -206,31 +206,8 @@ void mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS)
         addTailInt (queueS, queueB->head->data);
         removeHeadInt (queueB);
     }
+    return queueS;
 }
-
-// Function to perform Bubble Sort 
-void arraySort (int arr[], int size) 
-{ 
-    int temp = 0;; 
-    // One by one move boundary of unsorted subarray 
-    for (int i = 0; i < size; i++) 
-    { 
-        // Find the minimum element in unsorted array 
-        for (int j = 0; j < size - i; j++) 
-        {
-            if (arr[j] > arr[j+1])
-            {
-                temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
-            }
-        }
-    } 
-    // //Print the sorted array, uncomment below to see
-    // for (int i = 0; i < size; i++) {
-    //     printf("%d ", arr[i]); 
-    // }
-} 
 
 // Display the menu options.
 void menu(void) 
@@ -299,7 +276,9 @@ int main() {
                 {
                     addTailInt (queueS, listS[i]);
                 }
-                
+
+                printStackRecursiveInt (queueS->head);
+
                 // Perform Quick Sort 
                 // mergeSort (arr, 0, size - 1);
 
