@@ -211,20 +211,23 @@ Int_Node* MergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queue
 
 void MergeSort (Int_Node* queueS)
 {
-    // sd
+    // Base case. Split the queue into 2 parts until it has only 1 element
     if (queueS->size == 1)
     {
         return;
     }
 
+    // Declare and create queueA and queue B
     Int_Node* queueA = NULL;
     queueA = createNodeInt();
     Int_Node* queueB = NULL;
     queueB = createNodeInt();
 
+    // IMPORTANT!!! Need to put size of QueueS in a variable because the removeHeadInt() function below will reduce the size of QueueS, making the logic flaw
     int size = queueS->size;
     int sizeHalf = queueS->size / 2;
 
+    // Split the QueueS into 2 part and store half in QueueA and half in QueueB
     for (int i = 1; i <= size; i++)
     {
         if (i <= sizeHalf)
@@ -240,13 +243,11 @@ void MergeSort (Int_Node* queueS)
     }
 
     // QueueA
-    printf("\n");
-    printStackRecursiveInt (queueA->head);
+    // printStackRecursiveInt (queueA->head); //uncomment to Debug
     MergeSort(queueA);
 
     // QueueB
-    printf("\n");
-    printStackRecursiveInt (queueB->head);
+    // printStackRecursiveInt (queueB->head); //uncomment to Debug
     MergeSort(queueB);
 
     // Merge Sorted Queue
@@ -277,7 +278,10 @@ int main() {
     int size3 = sizeof(listS) / sizeof(listS[0]);
 
     Int_Node* queueS = NULL;
-    
+
+    // Initialize sizes for queues A and B
+    int sizes[10] = {100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200}; //100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200};
+
     while (1) 
     {
         menu ();
@@ -287,20 +291,20 @@ int main() {
         {
             //Press 1 to use Insertion Sort Algorithm
             case 1:
-                printf("Unsorted Array\n");
-                printArray(arr1, size1);
+                printf ("Unsorted Array\n");
+                printArray (arr1, size1);
 
                 // Perform Insertion Sort 
-                insertionSort(arr1, size1);
+                insertionSort (arr1, size1);
 
                 printf ("Sorted array in ascending order using Insertion Sort: \n");
-                printArray(arr1, size1);
+                printArray (arr1, size1);
                 break;
             
             //Press 2 to use Quick Sort Algorithm
             case 2:
-                printf("Unsorted Array\n");
-                printArray(arr2, size2);
+                printf ("Unsorted Array\n");
+                printArray (arr2, size2);
 
                 // Perform Quick Sort 
                 quickSort (arr2, 0, size2 - 1);
@@ -313,22 +317,76 @@ int main() {
             case 3:
                 queueS = createNodeInt();
     
-                // 
+                // Enqueue all the elements in the the array listS into queueS
                 for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
                 {
                     addTailInt (queueS, listS[i]);
                 }
 
-                printf("Original list: \n");
+                printf("Original list: ");
                 printStackRecursiveInt (queueS->head);
 
                 // Perform Quick Sort 
                 MergeSort (queueS);
 
-                printf("\nSorted list: \n");
+                printf("\n\nSorted list using Merged Sort: ");
                 printStackRecursiveInt (queueS->head);
 
                 break;    
+
+            //Test to see the running time for the function mergeSortedQueues()
+            case 4:
+                // // Loop through different sizes of lists
+                // for (int i = 0; i < 10; i++) //sizeof(sizes) / sizeof(sizes[0])
+                // {
+                //     printf("Size of n: %d\n", sizes[i]);
+                //     // Start measuring time
+                //     clock_t start_time = clock();
+
+                //     // Create queues with current size
+                //     queueS = createNodeInt();
+
+                //     // Generate sorted lists A and B with random data
+                //     int listS[sizes[i]];
+
+                //     // Fill lists S with random sorted data
+                //     for (int j = 0; j < sizes[i]; j++) 
+                //     {
+                //         listS[j] = rand() % 51201; //Range from 0 - 51200
+                //     }
+
+                //     // Enqueue elements from lists S into the queues
+                //     for (int j = 0; j < sizes[i]; j++) 
+                //     {
+                //         addTailInt(queueS, listS[j]);
+                //     }
+
+                //     // Merge queues A and B into queue S
+                //     insertionSort (listS, sizes[i]);
+                //     quickSort (listS, 0, sizes[i] - 1);
+                //     MergeSort (queueS);
+
+                //     // Stop measuring time
+                //     clock_t end_time = clock();
+                //     // Calculate elapsed time in nanoseconds
+                //     double elapsed_time_ns = ((double)(end_time - start_time) / CLOCKS_PER_SEC) * 1e9;
+                    
+                //     // //Print the merged queue S by DeQueue the Node
+                //     // printf("\nMerged Queue S: ");
+                //     // while (!isEmptyInt (queueS)) 
+                //     // {
+                //     //     printf("%d ", removeHeadInt (queueS));
+                //     // }
+                //     // printf("\n");
+
+                //     // Print the elapsed time
+                //     printf("\nElapsed Time for size %d: %.2f nanoseconds\n\n", sizes[i], elapsed_time_ns);
+
+                //     // Free memory for queues and lists
+                //     emptyListInt (queueS);
+                // }
+                
+                break;
 
             case 0:
                 exit(0);
