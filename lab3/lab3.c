@@ -21,7 +21,7 @@ void printArray (int array[], int size)
     printf("\n");
 }
 
-// Function to do Insertion sort (Like how u sort a poker card on your handm left to right, put lowest on the left and continue right)
+// Function to do Insertion sort (Like how u sort a poker card on your handm left to right, put lowest on the left and continue right). Time complexity: O(n^2)
 void insertionSort (int arr[], int size)
 {
 	int i, key, j;
@@ -36,11 +36,11 @@ void insertionSort (int arr[], int size)
 			arr[j + 1] = arr[j]; // Move element 1 position ahead of its current position
 			j--; // Reduce the index to move to index 0
 		}
-		arr[j + 1] = key; // Insert the key back to the array. Use j + 1 cuz at the index j, its element is smaller than the key element, so insert at the j + 1
+		arr[j + 1] = key; // Insert the key back to the array. Use j + 1 cuz at the index j after all the sorting, its element is smaller than the key element, so insert at the j + 1
 	}
 }
 
-// Function to find the partition position in the Quick Sort. If the pivot is the biggest or the smallest, it will take O(n^2) time complexity
+// Function to find the partition position in the Quick Sort. If the pivot is the biggest or the smallest: Time complexity: O(n^2)
 void quickSort (int array[], int low, int high) 
 {
     if (low < high) 
@@ -176,7 +176,7 @@ void emptyListInt (Int_Node* node)
 }
 
 // Merged 2 Sorted Queue A and Queue B into Queue S
-Int_Node* mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS) 
+Int_Node* MergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queueS) 
 {
     while (!isEmptyInt(queueA) && !isEmptyInt(queueB)) 
     {
@@ -209,6 +209,50 @@ Int_Node* mergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queue
     return queueS;
 }
 
+void MergeSort (Int_Node* queueS)
+{
+    // sd
+    if (queueS->size == 1)
+    {
+        return;
+    }
+
+    Int_Node* queueA = NULL;
+    queueA = createNodeInt();
+    Int_Node* queueB = NULL;
+    queueB = createNodeInt();
+
+    int size = queueS->size;
+    int sizeHalf = queueS->size / 2;
+
+    for (int i = 1; i <= size; i++)
+    {
+        if (i <= sizeHalf)
+        {
+            addTailInt (queueA, queueS->head->data);
+            removeHeadInt (queueS);
+        }
+        else
+        {
+            addTailInt (queueB, queueS->head->data);
+            removeHeadInt (queueS);
+        }
+    }
+
+    // QueueA
+    printf("\n");
+    printStackRecursiveInt (queueA->head);
+    MergeSort(queueA);
+
+    // QueueB
+    printf("\n");
+    printStackRecursiveInt (queueB->head);
+    MergeSort(queueB);
+
+    // Merge Sorted Queue
+    MergeSortedQueues (queueA, queueB, queueS);
+}
+
 // Display the menu options.
 void menu(void) 
 {
@@ -223,10 +267,11 @@ void menu(void)
 
 int main() {
     int choice;
-    // int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+
     int arr1[] = {10, 8, 9, 7, 2, 5, 3, 1, 6, 4};
     int arr2[] = {1, 2, 4, 5, 3, 7, 8, 10, 11, 9, 6};
     int listS[] = {1, 10, 4, 5, 3, 7, 8, 2, 11, 9, 6};
+
     int size1 = sizeof(arr1) / sizeof(arr1[0]);
     int size2 = sizeof(arr2) / sizeof(arr2[0]);
     int size3 = sizeof(listS) / sizeof(listS[0]);
@@ -267,20 +312,21 @@ int main() {
             //Press 3 to use Merged Sort Algorithm
             case 3:
                 queueS = createNodeInt();
-
-                //Sample data for lists A and B
-                
-
-                //Enqueue elements from lists A and B into their respective queues
+    
+                // 
                 for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
                 {
                     addTailInt (queueS, listS[i]);
                 }
 
+                printf("Original list: \n");
                 printStackRecursiveInt (queueS->head);
 
                 // Perform Quick Sort 
-                // mergeSort (arr, 0, size - 1);
+                MergeSort (queueS);
+
+                printf("\nSorted list: \n");
+                printStackRecursiveInt (queueS->head);
 
                 break;    
 
