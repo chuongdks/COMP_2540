@@ -345,12 +345,17 @@ int main() {
                 for (int i = 8; i < 1048577; i*=2) //  1048577
                 {
                     // Generate sorted lists A and B with random data
-                    int listS[i];
+                    int *listS = malloc(i * sizeof(int));
+                    if (listS == NULL) 
+                    {
+                        printf("Memory allocation failed\n");
+                        exit(EXIT_FAILURE);
+                    }
 
                     // Fill lists S with random sorted data
                     for (int j = 0; j < i; j++) 
                     {
-                        listS[j] = rand() % 51201; //Range from 0 - 51200
+                        listS[j] = rand() % 1048578; //Range from 0 - 1048578
                     }
                     
                     // Start measuring time
@@ -372,98 +377,108 @@ int main() {
                     printf("%d |  %.2f seconds\n", i, elapsed_time);
                 }
 
-                // // Seed the random number generator using the current time
-                // srand(time(NULL));
+                // Seed the random number generator using the current time
+                srand(time(NULL));
 
-                // printf("\n");
-                // printf("Quick Sort:\n");
-                // printf("Size | Time\n");
-                // printf("-----|------\n");    
+                printf("\n");
+                printf("Quick Sort:\n");
+                printf("Size | Time\n");
+                printf("-----|------\n");    
 
-                // // Loop through different sizes using Quick Sort
-                // for (int i = 8; i < 1048577; i*=2) //  1048577
-                // {
-                //     // Generate sorted lists A and B with random data
-                //     int listS[i];
+                // Loop through different sizes using Quick Sort
+                for (int i = 8; i < 1048577; i*=2) //  1048577
+                {
+                    // Generate sorted lists A and B with random data
+                    int *listS = malloc(i * sizeof(int));
+                    if (listS == NULL) 
+                    {
+                        printf("Memory allocation failed\n");
+                        exit(EXIT_FAILURE);
+                    }
 
-                //     // Fill lists S with random sorted data
-                //     for (int j = 0; j < i; j++) 
-                //     {
-                //         listS[j] = rand() % 51201; //Range from 0 - 51200
-                //     }
+                    // Fill lists S with random sorted data
+                    for (int j = 0; j < i; j++) 
+                    {
+                        listS[j] = rand() % 1048578; //Range from 0 - 1048578
+                    }
                     
-                //     // Start measuring time
-                //     clock_t start_time = clock();
+                    // Start measuring time
+                    clock_t start_time = clock();
 
-                //     // Do the Sorting 
-                //     quickSort (listS, 0, i - 1);
+                    // Do the Sorting 
+                    quickSort (listS, 0, i - 1);
 
-                //     // Stop measuring time
-                //     clock_t end_time = clock();
-                //     // Calculate elapsed time in nanoseconds
-                //     double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+                    // Stop measuring time
+                    clock_t end_time = clock();
+                    // Calculate elapsed time in nanoseconds
+                    double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
                     
-                //     // Print the
-                //     // printf("\nSorted Arrays using Insertion Sort: ");
-                //     // printArray (listS, i);
+                    // Print the
+                    // printf("\nSorted Arrays using Insertion Sort: ");
+                    // printArray (listS, i);
 
-                //     // Print the elapsed time
-                //     printf("%d |  %.2f seconds\n", i, elapsed_time);
-                // }
+                    // Print the elapsed time
+                    printf("%d |  %.2f seconds\n", i, elapsed_time);
+                }
 
-                // // Seed the random number generator using the current time
-                // srand(time(NULL));
+                // Seed the random number generator using the current time
+                srand(time(NULL));
 
-                // printf("\n");
-                // printf("Merged Sort:\n");
-                // printf("Size | Time\n");
-                // printf("-----|------\n");    
+                printf("\n");
+                printf("Merged Sort:\n");
+                printf("Size | Time\n");
+                printf("-----|------\n");    
                                
-                // // Loop through different sizes using Merged Sort
-                // for (int i = 8; i < 1048577; i*=2) //  1048577
-                // {
-                //     // Create queues with current size
-                //     queueS = createNodeInt();
+                // Loop through different sizes using Merged Sort
+                for (int i = 8; i < 1048577; i*=2) //  1048577
+                {
+                    // Create queues with current size
+                    queueS = createNodeInt();
 
-                //     // Generate sorted lists A and B with random data
-                //     int listS[i];
+                    // Generate sorted lists A and B with random data
+                    int *listS = malloc(i * sizeof(int));
+                    if (listS == NULL) 
+                    {
+                        printf("Memory allocation failed\n");
+                        exit(EXIT_FAILURE);
+                    }
 
-                //     // Fill lists S with random sorted data
-                //     for (int j = 0; j < i; j++) 
-                //     {
-                //         listS[j] = rand() % 51201; //Range from 0 - 51200
-                //     }
+                    // Fill lists S with random sorted data
+                    for (int j = 0; j < i; j++) 
+                    {
+                        listS[j] = rand() % 1048578; //Range from 0 - 1048578
+                    }
 
-                //     // Enqueue elements from lists S into the queues
-                //     for (int j = 0; j < i; j++) 
-                //     {
-                //         addTailInt(queueS, listS[j]);
-                //     }
+                    // Enqueue elements from lists S into the queues
+                    for (int j = 0; j < i; j++) 
+                    {
+                        addTailInt(queueS, listS[j]);
+                    }
                     
-                //     // Start measuring time
-                //     clock_t start_time = clock();
+                    // Start measuring time
+                    clock_t start_time = clock();
 
-                //     // Do the Sorting 
-                //     MergeSort (queueS);
+                    // Do the Sorting 
+                    MergeSort (queueS);
 
-                //     // Stop measuring time
-                //     clock_t end_time = clock();
-                //     // Calculate elapsed time in nanoseconds
-                //     double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+                    // Stop measuring time
+                    clock_t end_time = clock();
+                    // Calculate elapsed time in nanoseconds
+                    double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
                     
-                //     // //Print the merged queue S by DeQueue the Node
-                //     // printf("\nMerged Queue S: ");
-                //     // while (!isEmptyInt (queueS)) 
-                //     // {
-                //     //     printf("%d ", removeHeadInt (queueS));
-                //     // }
-                //     // printf("\n");
+                    // //Print the merged queue S by DeQueue the Node
+                    // printf("\nMerged Queue S: ");
+                    // while (!isEmptyInt (queueS)) 
+                    // {
+                    //     printf("%d ", removeHeadInt (queueS));
+                    // }
+                    // printf("\n");
 
-                //     // Print the elapsed time
-                //     printf("%d |  %.2f seconds\n", i, elapsed_time);
-                //     // Free memory for queues and lists
-                //     emptyListInt (queueS);
-                // }                                
+                    // Print the elapsed time
+                    printf("%d |  %.2f seconds\n", i, elapsed_time);
+                    // Free memory for queues and lists
+                    emptyListInt (queueS);
+                }                                
 
                 break;
 
