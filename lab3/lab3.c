@@ -40,14 +40,14 @@ void insertionSort (int arr[], int size)
 	}
 }
 
-// Function to find the partition position in the Quick Sort. If the pivot is the biggest or the smallest: Time complexity: O(n^2)
+// Function to find the partition position in the Quick Sort. Remember to subtract size of array by 1 cuz Index. If the pivot is the biggest or the smallest: Time complexity: O(n^2)
 void quickSort (int array[], int low, int high) 
 {
     if (low < high) 
     {
         int pivot = array[high];
         int leftIndex = low;
-        int rightIndex = high - 1;
+        int rightIndex = high - 1; // rightIndex = high -1 cuz that is the pivot's place
         
         while (leftIndex <= rightIndex)
         {
@@ -254,6 +254,18 @@ void MergeSort (Int_Node* queueS)
     MergeSortedQueues (queueA, queueB, queueS);
 }
 
+//Actually Reverse an Array instead of printing in reverse by swapping lowest Index and highest Index and repeat
+void ReverseArray (int array[], int low, int high)
+{
+    if (low < high) // Base case: low Index and high Index cross path
+    {
+        int temp = array[low];
+        array[low] = array[high];
+        array[high] = temp;
+        ReverseArray (array, low + 1, high - 1); 
+    }
+}
+
 // Display the menu options.
 void menu(void) 
 {
@@ -262,7 +274,7 @@ void menu(void)
     " 2. Quick Sort.\n"
     " 3. Merged Sort.\n"
     " 4. CPU time for Insertion Sort, Quick Sort and Merged Sort.\n"
-    " 7. Print in Reverse\n"
+    " 5. Print in Reverse\n"
     " 0. Exit.\n");
 }
 
@@ -479,6 +491,118 @@ int main() {
                     // Free memory for queues and lists
                     emptyListInt (queueS);
                 }                                
+
+                break;
+
+            case 5:
+                // Insertion Sort Reverse Array Recursively
+                printf ("Insertion Sort:\n");
+                printf("Original array: ");
+                for (int i = 0; i < size1; i++) 
+                {
+                    printf("%d ", arr1[i]);
+                }
+
+                ReverseArray (arr1, 0, size1 - 1);
+
+                printf("\nReversed array: ");
+                for (int i = 0; i < size1; i++) 
+                {
+                    printf("%d ", arr1[i]);
+                }
+
+                insertionSort (arr1, size1);
+                
+                printf("\nSorted Original array: ");
+                for (int i = 0; i < size1; i++) 
+                {
+                    printf("%d ", arr1[i]);
+                }
+
+                ReverseArray (arr1, 0, size1 - 1);
+
+                printf("\nSorted Reversed array: ");
+                for (int i = 0; i < size1; i++) 
+                {
+                    printf("%d ", arr1[i]);
+                }
+
+                // Quick Sort Reverse Array Recursively
+                printf ("\n\nQuick Sort:\n");
+                printf("Original array: ");
+                for (int i = 0; i < size2; i++) 
+                {
+                    printf("%d ", arr2[i]);
+                }
+
+                ReverseArray (arr2, 0, size2 - 1);
+
+                printf("\nReversed array: ");
+                for (int i = 0; i < size2; i++) 
+                {
+                    printf("%d ", arr2[i]);
+                }
+
+                quickSort (arr2, 0, size2 - 1);
+                
+                printf("\nSorted Original array: ");
+                for (int i = 0; i < size2; i++) 
+                {
+                    printf("%d ", arr2[i]);
+                }
+
+                ReverseArray (arr2, 0, size2 - 1);
+
+                printf("\nSorted Reversed array: ");
+                for (int i = 0; i < size2; i++) 
+                {
+                    printf("%d ", arr2[i]);
+                }
+
+                // Merged Sort Reverse Array Recursively
+                
+                queueS = createNodeInt();
+
+                printf ("\n\nMerged Sort:\n");
+                printf("Original array: ");
+                for (int i = 0; i < size3; i++) 
+                {
+                    printf("%d ", listS[i]);
+                }
+
+                ReverseArray (listS, 0, size3 - 1);
+
+                printf("\nReversed array: ");
+                for (int i = 0; i < size3; i++) 
+                {
+                    printf("%d ", listS[i]);
+                }
+
+                // Enqueue all the elements in the the array listS into queueS
+                for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
+                {
+                    addTailInt (queueS, listS[i]);
+                }
+                MergeSort (queueS);
+                // Dequeue all the elements in the the queueS into array listS
+                for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
+                {
+                    listS[i] = removeHeadInt (queueS);
+                }
+                
+                printf("\nSorted Original array: ");
+                for (int i = 0; i < size3; i++) 
+                {
+                    printf("%d ", listS[i]);
+                }
+
+                ReverseArray (listS, 0, size3 - 1);
+
+                printf("\nSorted Reversed array: ");
+                for (int i = 0; i < size3; i++) 
+                {
+                    printf("%d ", listS[i]);
+                }                
 
                 break;
 
