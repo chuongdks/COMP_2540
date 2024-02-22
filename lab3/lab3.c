@@ -291,6 +291,8 @@ int main() {
 
     Int_Node* queueS = NULL;
 
+    FILE * fp;
+
     while (1) 
     {
         menu ();
@@ -343,18 +345,21 @@ int main() {
 
                 break;    
 
-            //Test to see the running time for the function mergeSortedQueues()
+            //Test to see the running time for 3 Sorting Algorithm
             case 4:
+                // Open file to read and write
+                fp = fopen ("CPU_Time_Insertion_Sort.txt", "w");
+
                 // Seed the random number generator using the current time
                 srand(time(NULL));
 
-                printf("\n");
-                printf("Insertion Sort:\n");
-                printf("Size | Time\n");
-                printf("-----|------\n");
+                fprintf(fp, "\n");
+                fprintf(fp, "Insertion Sort:\n");
+                fprintf(fp, "Size | Time\n");
+                fprintf(fp, "-----|------\n");
 
                 // Loop through different sizes using Insertion Sort
-                for (int i = 8; i < 1048577; i*=2) //  1048577
+                for (int i = 8; i < 1048577; i*=2) // 64 --> 1048576 // Memory allocation failed
                 {
                     // Generate sorted lists A and B with random data
                     int *listS = malloc(i * sizeof(int));
@@ -386,16 +391,23 @@ int main() {
                     // printArray (listS, i);
 
                     // Print the elapsed time
-                    printf("%d |  %.2f seconds\n", i, elapsed_time);
+                    // printf("%d |  %.2f seconds\n", i, elapsed_time);
+
+                    // Print the elapsed time to a file
+                    fprintf(fp, "%d |  %.2f seconds\n", i, elapsed_time);
                 }
+
+                // Open file to read and write
+                fclose(fp);
+                fp = fopen ("CPU_Time_Quick_Sort.txt", "w");
 
                 // Seed the random number generator using the current time
                 srand(time(NULL));
 
-                printf("\n");
-                printf("Quick Sort:\n");
-                printf("Size | Time\n");
-                printf("-----|------\n");    
+                fprintf(fp, "\n");
+                fprintf(fp, "Quick Sort:\n");
+                fprintf(fp, "Size | Time\n");
+                fprintf(fp, "-----|------\n");
 
                 // Loop through different sizes using Quick Sort
                 for (int i = 8; i < 1048577; i*=2) //  1048577
@@ -430,16 +442,23 @@ int main() {
                     // printArray (listS, i);
 
                     // Print the elapsed time
-                    printf("%d |  %.2f seconds\n", i, elapsed_time);
+                    // printf("%d |  %.2f seconds\n", i, elapsed_time);
+
+                    // Print the elapsed time to a file
+                    fprintf(fp, "%d |  %.2f seconds\n", i, elapsed_time);                    
                 }
+
+                // Open file to read and write
+                fclose(fp);
+                fp = fopen ("CPU_Time_Merged_Sort.txt", "w");
 
                 // Seed the random number generator using the current time
                 srand(time(NULL));
 
-                printf("\n");
-                printf("Merged Sort:\n");
-                printf("Size | Time\n");
-                printf("-----|------\n");    
+                fprintf(fp, "\n");
+                fprintf(fp, "Merged Sort:\n");
+                fprintf(fp, "Size | Time\n");
+                fprintf(fp, "-----|------\n");
                                
                 // Loop through different sizes using Merged Sort
                 for (int i = 8; i < 1048577; i*=2) //  1048577
@@ -487,11 +506,15 @@ int main() {
                     // printf("\n");
 
                     // Print the elapsed time
-                    printf("%d |  %.2f seconds\n", i, elapsed_time);
+                    // printf("%d |  %.2f seconds\n", i, elapsed_time);
+
+                    // Print the elapsed time to a file
+                    fprintf(fp, "%d |  %.2f seconds\n", i, elapsed_time);    
+
                     // Free memory for queues and lists
                     emptyListInt (queueS);
                 }                                
-
+                fclose (fp);
                 break;
 
             case 5:
