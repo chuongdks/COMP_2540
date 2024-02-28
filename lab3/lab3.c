@@ -30,7 +30,7 @@ void insertionSort (int arr[], int size)
 		key = arr[i]; // Store the next element to be compared to a temporary variable named key
 		j = i - 1; // Check the element to the left of the key element index
 
-		// Move elements of arr[0..i-1] from index: (key_index - 1) to index: 0. If that element is greater than key, move one position ahead of its current position 
+		// Move elements of arr{i-1..0}. From index: (key_index - 1) to index: 0. If that element is greater than key, move one position ahead of its current position 
 		while (j >= 0 && arr[j] > key) 
         {
 			arr[j + 1] = arr[j]; // Move element 1 position ahead of its current position
@@ -295,7 +295,7 @@ int main() {
 
     while (1) 
     {
-        menu ();
+        menu();
         scanf("%d", &choice);
 
         switch (choice) 
@@ -365,8 +365,8 @@ int main() {
                     int *listS = malloc(i * sizeof(int));
                     if (listS == NULL) 
                     {
-                        printf("Memory allocation failed\n");
-                        exit(EXIT_FAILURE);
+                        printf ("Memory allocation failed\n");
+                        exit(1);
                     }
 
                     // Fill lists S with random sorted data
@@ -416,8 +416,8 @@ int main() {
                     int *listS = malloc(i * sizeof(int));
                     if (listS == NULL) 
                     {
-                        printf("Memory allocation failed\n");
-                        exit(EXIT_FAILURE);
+                        printf ("Memory allocation failed\n");
+                        exit(1);
                     }
 
                     // Fill lists S with random sorted data
@@ -470,8 +470,8 @@ int main() {
                     int *listS = malloc(i * sizeof(int));
                     if (listS == NULL) 
                     {
-                        printf("Memory allocation failed\n");
-                        exit(EXIT_FAILURE);
+                        printf ("Memory allocation failed\n");
+                        exit(1);
                     }
 
                     // Fill lists S with random sorted data
@@ -604,13 +604,13 @@ int main() {
                 // Enqueue all the elements in the the array listS into queueS
                 for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
                 {
-                    addTailInt (queueS, listS[i]);
+                    addTailInt(queueS, listS[i]);
                 }
                 MergeSort (queueS);
                 // Dequeue all the elements in the the queueS into array listS
                 for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
                 {
-                    listS[i] = removeHeadInt (queueS);
+                    listS[i] = removeHeadInt(queueS);
                 }
                 
                 printf("\nSorted Original array: ");
