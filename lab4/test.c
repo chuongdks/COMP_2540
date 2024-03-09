@@ -32,7 +32,7 @@ void Swap (int *x, int *y)
     *y = temp;
 }
 
-// Used after the Insertion of the new key k. Restore the MinHeap order by swapping 'k' along the upward path
+// 1. Used after the Insertion of the new key k. Restore the MinHeap order by swapping 'k' along the upward path
 void UpHeap (int index) 
 {
     // Upheap is Terminate when the key k reach the root (no parent node), or a node whose parent has element (key) <= current element (key)
@@ -44,7 +44,7 @@ void UpHeap (int index)
     }
 }
 
-// Insert a key at the last node (Last node of a binary tree is last index of Array)
+// 2. Insert a key at the last node (Last node of a binary tree is last index of Array)
 void Insert (int key) 
 {
     // Check if size is larger than the Maximum heap size
@@ -60,24 +60,42 @@ void Insert (int key)
     UpHeap(size - 1);
 }
 
-// Used after replacing the root's element (key) 
+// 3. Used after replacing the root's element (key) 
 void DownHeap (int index) 
 {
     int smallest = index;
     int left = LeftChild(index);
     int right = RightChild(index);
 
-    if (left < size && heap[left] < heap[smallest])
-        smallest = left;
-    if (right < size && heap[right] < heap[smallest])
-        smallest = right;
+    // Choose the smaller element of the left or right child
+    if (heap[left] < heap[right]) 
+    {
+        // switch index with child if element of the current index > element of the child's current index
+        if (left < size && heap[left] < heap[smallest]) 
+        {
+            smallest = left; // if the index reach max size or if the current left child's element < current index element
+        }
+    }
+    else 
+    {
+        // switch index with child if element of the current index > element of the child's current index
+        if (right < size && heap[right] < heap[smallest]) 
+        {
+            smallest = right; // if the index reach max size or if the current left child's element < current index element
+        }
+    }
 
-    if (smallest != index) {
+    // smallest = (heap[left] < heap[right]) ? ((left < size && heap[left] < heap[smallest]) ? left : smallest) : ((right < size && heap[right] < heap[smallest]) ? right : smallest);
+
+    // Swapped the element with the child index if satisfy the condition
+    if (smallest != index) 
+    {
         Swap(&heap[index], &heap[smallest]);
         DownHeap(smallest);
     }
 }
 
+// 4. Remove the root of the Node and replace it with the 
 int RemoveMin() 
 {
     if (size <= 0) 
@@ -86,9 +104,9 @@ int RemoveMin()
         return -1;
     }
 
-    int min = heap[0];
-    heap[0] = heap[size - 1];
-    size--;
+    int min = heap[0]; // store element at root with a temporary variable
+    heap[0] = heap[size - 1]; // replace element at root with the final element
+    size--; // Decrease size
     DownHeap(0);
 
     return min;
@@ -103,6 +121,43 @@ int Min()
     }
     return heap[0];
 }
+
+// int minRecursive(int index) 
+// {
+//     if (index >= size) {
+//         printf("Invalid index.\n");
+//         return -1;
+//     }
+
+//     if (index == size - 1) {
+//         return heap[index];
+//     }
+
+//     int min = minRecursive(index + 1);
+//     return (heap[index] < min) ? heap[index] : min;
+// }
+
+// int minRecursive(int index) 
+// {
+//     if (index >= size) {
+//         printf("Invalid index.\n");
+//         return -1;
+//     }
+
+//     int left = leftChild(index);
+//     int right = rightChild(index);
+
+//     int smallest = index;
+//     if (left < size && heap[left] < heap[smallest])
+//         smallest = left;
+//     if (right < size && heap[right] < heap[smallest])
+//         smallest = right;
+
+//     if (smallest != index)
+//         return minRecursive(smallest);
+//     else
+//         return heap[index];
+// }
 
 int HeapSize() 
 {
@@ -140,17 +195,25 @@ void DisplayHeap()
 }
 
 int main() {
-    Insert(6);
-    Insert(2);
-    Insert(7);
-    Insert(9);
+    Insert(3);
     Insert(5);
+    Insert(6);
+    Insert(15);
+    Insert(9);
+    Insert(7);
+    Insert(20);
+    Insert(16);
+    Insert(25);
+    Insert(14);
+    Insert(12);
+    Insert(11);
+    Insert(19);
 
     DisplayHeap();
 
     printf("Min element: %d\n", Min());
     printf("Removing min element...\n");
-    // RemoveMin();
+    RemoveMin();
     DisplayHeap();
 
     printf("Heap size: %d\n", HeapSize());

@@ -180,7 +180,7 @@ Int_Node* MergeSortedQueues (Int_Node* queueA, Int_Node* queueB, Int_Node* queue
 {
     while (!isEmptyInt(queueA) && !isEmptyInt(queueB)) 
     {
-        //If Front Content of Queue A >= than Queue B, then Enqueue Queue A item to Queue S and Dequeue item from queue A. Vice versa if Queue B > Queue A
+        //If Front Content of Queue A <= than Queue B, then Enqueue Queue A item to Queue S and Dequeue item from queue A. Vice versa if Queue B <= Queue A
         if (queueA->head->data <= queueB->head->data) 
         {
             addTailInt (queueS, queueA->head->data);
