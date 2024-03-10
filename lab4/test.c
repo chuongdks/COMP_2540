@@ -32,6 +32,39 @@ void Swap (int *x, int *y)
     *y = temp;
 }
 
+// In-order traversal
+void inorderTraversal(int index) 
+{
+    if (index < size) 
+    {
+        inorderTraversal(leftChild(index)); // Traverse left subtree
+        printf("%d ", heap[index]);         // Visit current node
+        inorderTraversal(rightChild(index)); // Traverse right subtree
+    }
+}
+
+// Pre-order traversal
+void preorderTraversal(int index) 
+{
+    if (index < size) 
+    {
+        printf("%d ", heap[index]);         // Visit current node
+        preorderTraversal(leftChild(index)); // Traverse left subtree
+        preorderTraversal(rightChild(index)); // Traverse right subtree
+    }
+}
+
+// Post-order traversal
+void postorderTraversal(int index) 
+{
+    if (index < size) 
+    {
+        postorderTraversal(leftChild(index)); // Traverse left subtree
+        postorderTraversal(rightChild(index)); // Traverse right subtree
+        printf("%d ", heap[index]);          // Visit current node
+    }
+}
+
 // 1. Used after the Insertion of the new key k. Restore the MinHeap order by swapping 'k' along the upward path
 void UpHeap (int index) 
 {
@@ -112,52 +145,85 @@ int RemoveMin()
     return min;
 }
 
-int Min() 
+// The most obvious find min function if use MinHeap
+// int Min() 
+// {
+//     if (size <= 0) 
+//     {
+//         printf("Heap is empty, no minimum element.\n");
+//         return -1;
+//     }
+//     return heap[0];
+// }
+
+int Min (int index) 
 {
-    if (size <= 0) 
+    int left = leftChild(index);
+    int right = rightChild(index);
+
+    int smallest = index;
+    // Choose the smaller element of the left or right child
+    if (heap[left] < heap[right]) 
     {
-        printf("Heap is empty, no minimum element.\n");
-        return -1;
+        // switch index with child if element of the current index > element of the child's current index
+        if (left < size && heap[left] < heap[smallest]) 
+        {
+            smallest = left; // if the index reach max size or if the current left child's element < current index element
+        }
     }
-    return heap[0];
+    else 
+    {
+        // switch index with child if element of the current index > element of the child's current index
+        if (right < size && heap[right] < heap[smallest]) 
+        {
+            smallest = right; // if the index reach max size or if the current left child's element < current index element
+        }
+    }
+
+    if (smallest != index)
+    {
+        return Min(smallest);
+    }
+    else
+    {
+        return heap[index];
+    }
 }
 
-// int minRecursive(int index) 
-// {
-//     if (index >= size) {
-//         printf("Invalid index.\n");
-//         return -1;
-//     }
+// Find max value of 
+int Max (int index) 
+{
+    int left = leftChild(index);
+    int right = rightChild(index);
 
-//     if (index == size - 1) {
-//         return heap[index];
-//     }
+    int largest = index;
+    // Choose the smaller element of the left or right child
+    if (heap[left] > heap[right]) 
+    {
+        // switch index with child if element of the current index > element of the child's current index
+        if (left < size && heap[left] > heap[largest]) 
+        {
+            largest = left; // if the index reach max size or if the current left child's element < current index element
+        }
+    }
+    else 
+    {
+        // switch index with child if element of the current index > element of the child's current index
+        if (right < size && heap[right] > heap[largest]) 
+        {
+            largest = right; // if the index reach max size or if the current left child's element < current index element
+        }
+    }
 
-//     int min = minRecursive(index + 1);
-//     return (heap[index] < min) ? heap[index] : min;
-// }
-
-// int minRecursive(int index) 
-// {
-//     if (index >= size) {
-//         printf("Invalid index.\n");
-//         return -1;
-//     }
-
-//     int left = leftChild(index);
-//     int right = rightChild(index);
-
-//     int smallest = index;
-//     if (left < size && heap[left] < heap[smallest])
-//         smallest = left;
-//     if (right < size && heap[right] < heap[smallest])
-//         smallest = right;
-
-//     if (smallest != index)
-//         return minRecursive(smallest);
-//     else
-//         return heap[index];
-// }
+    if (largest != index)
+    {
+        return Max(largest);
+    }
+    else
+    {
+        return heap[index];
+    }
+}
 
 int HeapSize() 
 {
