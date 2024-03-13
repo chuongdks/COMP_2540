@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h> 
 
 #define MAX_HEAP_SIZE 100
 
@@ -37,9 +38,9 @@ void inorderTraversal(int index)
 {
     if (index < size) 
     {
-        inorderTraversal(leftChild(index)); // Traverse left subtree
+        inorderTraversal(LeftChild(index)); // Traverse left subtree
         printf("%d ", heap[index]);         // Visit current node
-        inorderTraversal(rightChild(index)); // Traverse right subtree
+        inorderTraversal(RightChild(index)); // Traverse right subtree
     }
 }
 
@@ -49,8 +50,8 @@ void preorderTraversal(int index)
     if (index < size) 
     {
         printf("%d ", heap[index]);         // Visit current node
-        preorderTraversal(leftChild(index)); // Traverse left subtree
-        preorderTraversal(rightChild(index)); // Traverse right subtree
+        preorderTraversal(LeftChild(index)); // Traverse left subtree
+        preorderTraversal(RightChild(index)); // Traverse right subtree
     }
 }
 
@@ -59,10 +60,27 @@ void postorderTraversal(int index)
 {
     if (index < size) 
     {
-        postorderTraversal(leftChild(index)); // Traverse left subtree
-        postorderTraversal(rightChild(index)); // Traverse right subtree
+        postorderTraversal(LeftChild(index)); // Traverse left subtree
+        postorderTraversal(RightChild(index)); // Traverse right subtree
         printf("%d ", heap[index]);          // Visit current node
     }
+}
+
+int HeapSize() 
+{
+    return size;
+}
+
+int isEmpty() 
+{
+    return size == 0;
+}
+
+int IsExternal(int index)
+{
+    if (index >= size)
+        return 1;
+    return 0;
 }
 
 // 1. Used after the Insertion of the new key k. Restore the MinHeap order by swapping 'k' along the upward path
@@ -158,8 +176,8 @@ int RemoveMin()
 
 int Min (int index) 
 {
-    int left = leftChild(index);
-    int right = rightChild(index);
+    int left = LeftChild(index);
+    int right = RightChild(index);
 
     int smallest = index;
     // Choose the smaller element of the left or right child
@@ -193,46 +211,32 @@ int Min (int index)
 // Find max value of 
 int Max (int index) 
 {
-    int left = leftChild(index);
-    int right = rightChild(index);
+    int left = LeftChild(index);
+    int right = RightChild(index);
 
-    int largest = index;
-    // Choose the smaller element of the left or right child
-    if (heap[left] > heap[right]) 
+    // Base case
+    if (IsExternal(index))
+        return INT_MIN;
+ 
+    // Return maximum of 3 values:
+    // 1) Root's data 
+    // 2) Max in Left Subtree
+    // 3) Max in right subtree
+    int max = heap[index];
+    int leftMax = Max(left);
+    int rightMax = Max(right);
+
+    if (leftMax > max)
     {
-        // switch index with child if element of the current index > element of the child's current index
-        if (left < size && heap[left] > heap[largest]) 
-        {
-            largest = left; // if the index reach max size or if the current left child's element < current index element
-        }
-    }
-    else 
-    {
-        // switch index with child if element of the current index > element of the child's current index
-        if (right < size && heap[right] > heap[largest]) 
-        {
-            largest = right; // if the index reach max size or if the current left child's element < current index element
-        }
+        max = leftMax;
     }
 
-    if (largest != index)
+    if (rightMax > max)
     {
-        return Max(largest);
+        max = rightMax;
     }
-    else
-    {
-        return heap[index];
-    }
-}
 
-int HeapSize() 
-{
-    return size;
-}
-
-int isEmpty() 
-{
-    return size == 0;
+    return max;
 }
 
 void HeapSort (int arr[], int n) 
@@ -277,10 +281,12 @@ int main() {
 
     DisplayHeap();
 
-    printf("Min element: %d\n", Min());
+    printf("Min element: %d\n", Min(0));
     printf("Removing min element...\n");
     RemoveMin();
     DisplayHeap();
+
+    printf("Max element: %d\n", Max(0));
 
     printf("Heap size: %d\n", HeapSize());
     printf("Is heap empty? %s\n", isEmpty() ? "Yes" : "No");
