@@ -1,127 +1,294 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <limits.h> 
 #include <time.h>
+#include <string.h>
 
-// Function to swap elements
-void swap (int *a, int *b) 
+#define MAX_HEAP_SIZE 100
+
+int heap[MAX_HEAP_SIZE];
+int size = 0;
+
+// Get the index of the Parent index based on current one
+int Parent (int i) 
 {
-  int temp = *a;
-  *a = *b;
-  *b = temp;
+    return i / 2;
 }
 
-// Function to print array elements
-void printArray (int array[], int size) 
+// Get the index of the Left Child index based on current one
+int LeftChild (int i) 
 {
-    for (int i = 0; i < size; ++i) 
+    return 2 * i;
+}
+
+// Get the index of the Right Child index based on current one
+int RightChild (int i) 
+{
+    return 2 * i + 1;
+}
+
+// Classic Swap function
+void Swap (int *x, int *y) 
+{
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+// In-order traversal
+void inorderTraversal(int index) 
+{
+    if (index <= size) 
     {
-        printf("%d  ", array[i]);
+        inorderTraversal(LeftChild(index)); // Traverse left subtree
+        printf("%d ", heap[index]);         // Visit current node
+        inorderTraversal(RightChild(index)); // Traverse right subtree
+    }
+}
+
+// Pre-order traversal
+void preorderTraversal(int index) 
+{
+    if (index <= size) 
+    {
+        printf("%d ", heap[index]);         // Visit current node
+        preorderTraversal(LeftChild(index)); // Traverse left subtree
+        preorderTraversal(RightChild(index)); // Traverse right subtree
+    }
+}
+
+// Post-order traversal
+void postorderTraversal(int index) 
+{
+    if (index <= size) 
+    {
+        postorderTraversal(LeftChild(index)); // Traverse left subtree
+        postorderTraversal(RightChild(index)); // Traverse right subtree
+        printf("%d ", heap[index]);          // Visit current node
+    }
+}
+
+int HeapSize() 
+{
+    return size;
+}
+
+int isEmpty() 
+{
+    return size == 0;
+}
+
+int IsExternal(int index)
+{
+    if (index > size)
+    {
+        return 1;
+    }
+    return 0;
+}
+
+// 1. Used after the Insertion of the new key k. Restore the MinHeap order by swapping 'k' along the upward path
+void UpHeap (int index) 
+{
+    // Upheap is Terminate when the key k reach the root (no parent node), or a node whose parent has element (key) <= current element (key)
+    while (index > 1 && heap[Parent(index)] > heap[index]) // while not reach root and parent element > current's element --> Swap place
+    {
+        // The index is moved in the Swap() function, continue the action UpHeap until condition is met
+        Swap (&heap[Parent(index)], &heap[index]); // Use swap() to switch place btw Parent index and current index
+        index = Parent(index); // Remember to change the position to the current's Parent after switching the element     
+    }
+}
+
+// 2. Insert a key at the last node (Last node of a binary tree is last index of Array)
+void Insert (int key) 
+{
+    // Check if size is larger than the Maximum heap size
+    if (size >= MAX_HEAP_SIZE)
+    {
+        printf("Heap Array is full, cannot insert more elements.\n");
+        return;
+    }
+
+    // Insert the key element to the index size, which is the larges index (last Node) of the heap
+    heap[size+1] = key;
+    size++; //increase the size after that for future use
+    UpHeap(size);
+}
+
+// 3. Used after replacing the root's element (key) 
+void DownHeap (int index) 
+{
+    int smallest = index;
+    int left = LeftChild(index);
+    int right = RightChild(index);
+
+    // Choose the smaller element of the left or right child
+    if (heap[left] < heap[right]) 
+    {
+        // switch index with child if element of the current index > element of the child's current index
+        if (left <= size && heap[left] < heap[smallest]) 
+        {
+            smallest = left; // if the index reach max size or if the current left child's element < current index element
+        }
+    }
+    else 
+    {
+        // switch index with child if element of the current index > element of the child's current index
+        if (right <= size && heap[right] < heap[smallest]) 
+        {
+            smallest = right; // if the index reach max size or if the current left child's element < current index element
+        }
+    }
+
+    // smallest = (heap[left] < heap[right]) ? ((left <= size && heap[left] < heap[smallest]) ? left : smallest) : ((right <= size && heap[right] < heap[smallest]) ? right : smallest);
+
+    // Swapped the element with the child index if satisfy the condition
+    if (smallest != index) 
+    {
+        Swap(&heap[index], &heap[smallest]);
+        DownHeap(smallest);
+    }
+}
+
+// 4. Remove the root of the Node and replace it with the 
+int RemoveMin() 
+{
+    if (size < 1) 
+    {
+        printf("Heap is empty, cannot remove minimum element.\n");
+        return -1;
+    }
+
+    int min = heap[1]; // store element at root with a temporary variable
+    heap[1] = heap[size]; // replace element at root with the final element
+    size--; // Decrease size
+    DownHeap(1);
+
+    return min;
+}
+
+// The most obvious find min function if use MinHeap
+// int Min() 
+// {
+//     if (size <= 0) 
+//     {
+//         printf("Heap is empty, no minimum element.\n");
+//         return -1;
+//     }
+//     return heap[0];
+// }
+
+int Min (int index) 
+{
+    int left = LeftChild(index);
+    int right = RightChild(index);
+
+    // Base case
+    if (IsExternal(index))
+      return INT_MAX;
+ 
+    // Return minimum of 3 values:
+    // 1) Root's data 
+    // 2) Max in Left Subtree
+    // 3) Max in right subtree
+    int min = heap[index];
+    int leftMin = Min(left);
+    int rightMax = Min(right);
+
+    if (leftMin < min)
+    {
+         min = leftMin;
+    }
+    if (rightMax < min)
+    {
+        min = rightMax;
+    }
+
+    return min;
+}
+
+// Find max value of 
+int Max (int index) 
+{
+    int left = LeftChild(index);
+    int right = RightChild(index);
+
+    // Base case
+    if (IsExternal(index))
+        return INT_MIN;
+ 
+    // Return maximum of 3 values:
+    // 1) Root's data 
+    // 2) Max in Left Subtree
+    // 3) Max in right subtree
+    int max = heap[index];
+    int leftMax = Max(left);
+    int rightMax = Max(right);
+
+    if (leftMax > max)
+    {
+        max = leftMax;
+    }
+    if (rightMax > max)
+    {
+        max = rightMax;
+    }
+
+    return max;
+}
+
+void DisplayHeap() 
+{
+    printf("Heap: ");
+    for (int i = 1; i <= size; i++) 
+    {
+        printf("%d ", heap[i]);
     }
     printf("\n");
 }
 
-// Function to do Insertion sort (Like how u sort a poker card on your handm left to right, put lowest on the left and continue right). Time complexity: O(n^2)
-void insertionSort (int arr[], int size)
+void HeapSort (int arr[], int n) 
 {
-	int i, key, j;
-	for (i = 1; i < size; i++) 
+    // Build heap
+    for (int i = 0; i < n; i++) 
     {
-		key = arr[i]; // Store the next element to be compared to a temporary variable named key
-		j = i - 1; // Check the element to the left of the key element index
+        Insert(arr[i]);
+    }
+    
+    DisplayHeap();
 
-		// Move elements of arr{i-1..0}. From index: (key_index - 1) to index: 0. If that element is greater than key, move one position ahead of its current position 
-		while (j >= 0 && arr[j] > key) 
-        {
-			arr[j + 1] = arr[j]; // Move element 1 position ahead of its current position
-			j--; // Reduce the index to move to index 0
-		}
-		arr[j + 1] = key; // Insert the key back to the array. Use j + 1 cuz at the index j after all the sorting, its element is smaller than the key element, so insert at the j + 1
-	}
+    // Extract elements from heap in sorted order
+    printf("Sorted Heap: ");
+    for (int i = 0; i < n; i++) 
+    {
+        arr[i] = RemoveMin();
+        printf("%d ", arr[i]);
+    }  
 }
 
-// Function to find the partition position in the Quick Sort. Remember to subtract size of array by 1 cuz Index. If the pivot is the biggest or the smallest: Time complexity: O(n^2)
-void quickSort (int array[], int low, int high) 
+void ClearHeap() 
 {
-    if (low < high) 
-    {
-        int pivot = array[high];
-        int leftIndex = low;
-        int rightIndex = high - 1; // rightIndex = high -1 cuz that is the pivot's place
-        
-        while (leftIndex <= rightIndex)
-        {
-            while ( (leftIndex <= rightIndex) && (array[leftIndex] <= pivot) )
-            {
-                leftIndex += 1;
-            }
-            while ( (leftIndex <= rightIndex) && (array[rightIndex] >= pivot) )
-            {
-                rightIndex -= 1;
-            }
-            if (leftIndex < rightIndex)
-            {
-                swap (&array[leftIndex], &array[rightIndex]);
-            }
-        }
-
-        // relocate the pivot, after the line below, the left side has # less than pivot, and the right side has # larger than pivot
-        swap (&array[leftIndex], &array[high]);
-
-        // recursive call on the left of pivot
-        quickSort (array, low, leftIndex - 1);
-
-        // recursive call on the right of pivot
-        quickSort (array, leftIndex + 1, high);
-    }
-}
-
-// Create a Linked List for the integer type data
-typedef struct Int_Node_struct{
-    int data;
-    struct Int_Node_struct* nextNodePtr;
-    struct Int_Node_struct* head;
-    struct Int_Node_struct* tail;
-    int size;
-} Int_Node;
-
-
-//Actually Reverse an Array instead of printing in reverse by swapping lowest Index and highest Index and repeat
-void ReverseArray (int array[], int low, int high)
-{
-    if (low < high) // Base case: low Index and high Index cross path
-    {
-        int temp = array[low];
-        array[low] = array[high];
-        array[high] = temp;
-        ReverseArray (array, low + 1, high - 1); 
-    }
+    size = 0; // Reset the size to 0, effectively clearing the heap
 }
 
 // Display the menu options.
 void menu(void) 
 {
     puts("\nEnter your choice:\n"
-    " 1. Insertion-Sort.\n"
-    " 2. Quick Sort.\n"
-    " 3. Merged Sort.\n"
-    " 4. CPU time for Insertion Sort, Quick Sort and Merged Sort.\n"
-    " 5. Print in Reverse\n"
+    " 1. Insert a number into the Heap.\n"
+    " 2. Remove the Root from the Heap.\n"
+    " 3. Find the Max and Min value of the Heap.\n"
+    " 4. Check if the Heap is Empty and Check its Size.\n"
+    " 5. Display the Heap\n"
+    " 6. Emptied the Heap\n"
+    " 7. Test the running time for the Heap Sort\n"
     " 0. Exit.\n");
 }
 
 int main() {
     int choice;
 
-    int arr1[] = {10, 8, 9, 7, 2, 5, 3, 1, 6, 4};
-    int arr2[] = {1, 2, 4, 5, 3, 7, 8, 10, 11, 9, 6};
-    int listS[] = {1, 10, 4, 5, 3, 7, 8, 2, 11, 9, 6};
-
-    int size1 = sizeof(arr1) / sizeof(arr1[0]);
-    int size2 = sizeof(arr2) / sizeof(arr2[0]);
-    int size3 = sizeof(listS) / sizeof(listS[0]);
-
-    Int_Node* queueS = NULL;
+    char items;
 
     FILE * fp;
 
@@ -132,55 +299,49 @@ int main() {
 
         switch (choice) 
         {
-            //Press 1 to use Insertion Sort Algorithm
+            //Press 1 to Insert a number into the Heap
             case 1:
-                printf ("Unsorted Array\n");
-                printArray (arr1, size1);
-
-                // Perform Insertion Sort 
-                insertionSort (arr1, size1);
-
-                printf ("Sorted array in ascending order using Insertion Sort: \n");
-                printArray (arr1, size1);
+                printf("Enter any number to Insert into the Heap: ");
+                scanf(" %d", &items);
+                Insert(items);
+                DisplayHeap();
+                printf("\n");
                 break;
             
-            //Press 2 to use Quick Sort Algorithm
+            //Press 2 to Remove the Root from the Heap
             case 2:
-                printf ("Unsorted Array\n");
-                printArray (arr2, size2);
-
-                // Perform Quick Sort 
-                quickSort (arr2, 0, size2 - 1);
-
-                printf ("Sorted array in ascending order using Quick Sort: \n");
-                printArray (arr2, size2);
+                printf("Min element: %d\n", Min(1));
+                printf("Removing min element...\n");
+                RemoveMin();
+                DisplayHeap();            
                 break;
 
-            //Press 3 to use Merged Sort Algorithm
+            //Press 3 to find the Max and Min value of the Heap
             case 3:
-                queueS = createNodeInt();
-    
-                // Enqueue all the elements in the the array listS into queueS
-                for (int i = 0; i < sizeof(listS) / sizeof(listS[0]) ; i++)
-                {
-                    addTailInt (queueS, listS[i]);
-                }
-
-                printf("Original list: ");
-                printStackRecursiveInt (queueS->head);
-
-                // Perform Merged Sort
-                MergeSort (queueS);
-
-                printf("\n\nSorted list using Merged Sort: ");
-                printStackRecursiveInt (queueS->head);
-
+                printf("Max element: %d\n", Max(1));
+                printf("Min element: %d\n", Min(1));
                 break;    
 
-            //Test to see the running time for 3 Sorting Algorithm
+            //Press 4 to check if the Heap is Empty and to check its Size
             case 4:
+                printf("Is heap empty? %s\n", isEmpty() ? "Yes" : "No");
+                printf("Heap size: %d\n", HeapSize());
+                break;   
+
+            //Press 5 to Display the Heap
+            case 5:
+                DisplayHeap();
+                break;   
+
+            //Press 6 to Emptied the Heap
+            case 6:
+                ClearHeap();
+                break;               
+
+            //Press 7 to Test the running time for the Heap Sort
+            case 7:
                 // Open file to read and write
-                fp = fopen ("CPU_Time_Insertion_Sort.txt", "w");
+                fp = fopen ("CPU_Time_Heap_Sort.txt", "w");
 
                 // Seed the random number generator using the current time
                 srand(time(NULL));
@@ -193,6 +354,7 @@ int main() {
                 // Loop through different sizes using Insertion Sort
                 for (int i = 8; i < 1048577; i*=2) // 64 --> 1048576 // Memory allocation failed
                 {
+                    ClearHeap();
                     // Generate sorted lists A and B with random data
                     int *listS = malloc(i * sizeof(int));
                     if (listS == NULL) 
@@ -211,7 +373,7 @@ int main() {
                     clock_t start_time = clock();
 
                     // Do the Sorting 
-                    insertionSort (listS, i);
+                    HeapSort (listS, i);
 
                     // Stop measuring time
                     clock_t end_time = clock();
