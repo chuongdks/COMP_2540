@@ -87,7 +87,7 @@ int IsExternal(int index)
 void UpHeap (int index) 
 {
     // Upheap is Terminate when the key k reach the root (no parent node), or a node whose parent has element (key) <= current element (key)
-    while (index > 0 && heap[Parent(index)] > heap[index]) // while not reach root and current's parent element > current's element
+    while (index > 0 && heap[Parent(index)] > heap[index]) // while not reach root and parent element > current's element --> Swap place
     {
         // The index is moved in the Swap() function, continue the action UpHeap until condition is met
         Swap (&heap[Parent(index)], &heap[index]); // Use swap() to switch place btw Parent index and current index
@@ -179,33 +179,28 @@ int Min (int index)
     int left = LeftChild(index);
     int right = RightChild(index);
 
-    int smallest = index;
-    // Choose the smaller element of the left or right child
-    if (heap[left] < heap[right]) 
+    // Base case
+    if (IsExternal(index))
+      return INT_MAX;
+ 
+    // Return minimum of 3 values:
+    // 1) Root's data 
+    // 2) Max in Left Subtree
+    // 3) Max in right subtree
+    int min = heap[index];
+    int leftMin = Min(left);
+    int rightMax = Min(right);
+
+    if (leftMin < min)
     {
-        // switch index with child if element of the current index > element of the child's current index
-        if (left < size && heap[left] < heap[smallest]) 
-        {
-            smallest = left; // if the index reach max size or if the current left child's element < current index element
-        }
+         min = leftMin;
     }
-    else 
+    if (rightMax < min)
     {
-        // switch index with child if element of the current index > element of the child's current index
-        if (right < size && heap[right] < heap[smallest]) 
-        {
-            smallest = right; // if the index reach max size or if the current left child's element < current index element
-        }
+        min = rightMax;
     }
 
-    if (smallest != index)
-    {
-        return Min(smallest);
-    }
-    else
-    {
-        return heap[index];
-    }
+    return min;
 }
 
 // Find max value of 
@@ -230,28 +225,12 @@ int Max (int index)
     {
         max = leftMax;
     }
-
     if (rightMax > max)
     {
         max = rightMax;
     }
 
     return max;
-}
-
-void HeapSort (int arr[], int n) 
-{
-    // Build heap
-    for (int i = 0; i < n; i++) 
-    {
-        Insert(arr[i]);
-    }
-
-    // Extract elements from heap in sorted order
-    for (int i = 0; i < n; i++) 
-    {
-        arr[i] = RemoveMin();
-    }
 }
 
 void DisplayHeap() 
@@ -264,21 +243,44 @@ void DisplayHeap()
     printf("\n");
 }
 
+void HeapSort (int arr[], int n) 
+{
+    // Build heap
+    for (int i = 0; i < n; i++) 
+    {
+        Insert(arr[i]);
+    }
+    
+    DisplayHeap();
+
+    // Extract elements from heap in sorted order
+    printf("Sorted Heap: ");
+    for (int i = 0; i < n; i++) 
+    {
+        arr[i] = RemoveMin();
+        printf("%d ", arr[i]);
+    }  
+}
+
+void ClearHeap() 
+{
+    size = 0; // Reset the size to 0, effectively clearing the heap
+}
+
 int main() {
+    Insert(19);
     Insert(3);
+    Insert(14);
+    Insert(25);
     Insert(5);
     Insert(6);
+    Insert(11);
+    Insert(7);
     Insert(15);
     Insert(9);
-    Insert(7);
+    Insert(12);
     Insert(20);
     Insert(16);
-    Insert(25);
-    Insert(14);
-    Insert(12);
-    Insert(11);
-    Insert(19);
-
     DisplayHeap();
 
     printf("Min element: %d\n", Min(0));
@@ -291,12 +293,11 @@ int main() {
     printf("Heap size: %d\n", HeapSize());
     printf("Is heap empty? %s\n", isEmpty() ? "Yes" : "No");
 
-    // int arr[] = {10, 5, 15, 30, 20};
-    // int n = sizeof(arr) / sizeof(arr[0]);
+    ClearHeap();
 
-    // HeapSort(arr, n);
-    // DisplayHeap(arr, n);
+    int arr[] = {6, 2, 7, 9, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
 
-
+    HeapSort(arr, n);
     return 0;
 }
