@@ -10,19 +10,19 @@ int size = 0;
 // Get the index of the Parent index based on current one
 int Parent (int i) 
 {
-    return (i - 1) / 2;
+    return i / 2;
 }
 
 // Get the index of the Left Child index based on current one
 int LeftChild (int i) 
 {
-    return 2 * i + 1;
+    return 2 * i;
 }
 
 // Get the index of the Right Child index based on current one
 int RightChild (int i) 
 {
-    return 2 * i + 2;
+    return 2 * i + 1;
 }
 
 // Classic Swap function
@@ -36,7 +36,7 @@ void Swap (int *x, int *y)
 // In-order traversal
 void inorderTraversal(int index) 
 {
-    if (index < size) 
+    if (index <= size) 
     {
         inorderTraversal(LeftChild(index)); // Traverse left subtree
         printf("%d ", heap[index]);         // Visit current node
@@ -47,7 +47,7 @@ void inorderTraversal(int index)
 // Pre-order traversal
 void preorderTraversal(int index) 
 {
-    if (index < size) 
+    if (index <= size) 
     {
         printf("%d ", heap[index]);         // Visit current node
         preorderTraversal(LeftChild(index)); // Traverse left subtree
@@ -58,7 +58,7 @@ void preorderTraversal(int index)
 // Post-order traversal
 void postorderTraversal(int index) 
 {
-    if (index < size) 
+    if (index <= size) 
     {
         postorderTraversal(LeftChild(index)); // Traverse left subtree
         postorderTraversal(RightChild(index)); // Traverse right subtree
@@ -78,8 +78,10 @@ int isEmpty()
 
 int IsExternal(int index)
 {
-    if (index >= size)
+    if (index > size)
+    {
         return 1;
+    }
     return 0;
 }
 
@@ -87,7 +89,7 @@ int IsExternal(int index)
 void UpHeap (int index) 
 {
     // Upheap is Terminate when the key k reach the root (no parent node), or a node whose parent has element (key) <= current element (key)
-    while (index > 0 && heap[Parent(index)] > heap[index]) // while not reach root and parent element > current's element --> Swap place
+    while (index > 1 && heap[Parent(index)] > heap[index]) // while not reach root and parent element > current's element --> Swap place
     {
         // The index is moved in the Swap() function, continue the action UpHeap until condition is met
         Swap (&heap[Parent(index)], &heap[index]); // Use swap() to switch place btw Parent index and current index
@@ -106,9 +108,9 @@ void Insert (int key)
     }
 
     // Insert the key element to the index size, which is the larges index (last Node) of the heap
-    heap[size] = key;
+    heap[size+1] = key;
     size++; //increase the size after that for future use
-    UpHeap(size - 1);
+    UpHeap(size);
 }
 
 // 3. Used after replacing the root's element (key) 
@@ -122,7 +124,7 @@ void DownHeap (int index)
     if (heap[left] < heap[right]) 
     {
         // switch index with child if element of the current index > element of the child's current index
-        if (left < size && heap[left] < heap[smallest]) 
+        if (left <= size && heap[left] < heap[smallest]) 
         {
             smallest = left; // if the index reach max size or if the current left child's element < current index element
         }
@@ -130,13 +132,13 @@ void DownHeap (int index)
     else 
     {
         // switch index with child if element of the current index > element of the child's current index
-        if (right < size && heap[right] < heap[smallest]) 
+        if (right <= size && heap[right] < heap[smallest]) 
         {
             smallest = right; // if the index reach max size or if the current left child's element < current index element
         }
     }
 
-    // smallest = (heap[left] < heap[right]) ? ((left < size && heap[left] < heap[smallest]) ? left : smallest) : ((right < size && heap[right] < heap[smallest]) ? right : smallest);
+    // smallest = (heap[left] < heap[right]) ? ((left <= size && heap[left] < heap[smallest]) ? left : smallest) : ((right <= size && heap[right] < heap[smallest]) ? right : smallest);
 
     // Swapped the element with the child index if satisfy the condition
     if (smallest != index) 
@@ -149,16 +151,16 @@ void DownHeap (int index)
 // 4. Remove the root of the Node and replace it with the 
 int RemoveMin() 
 {
-    if (size <= 0) 
+    if (size < 1) 
     {
         printf("Heap is empty, cannot remove minimum element.\n");
         return -1;
     }
 
-    int min = heap[0]; // store element at root with a temporary variable
-    heap[0] = heap[size - 1]; // replace element at root with the final element
+    int min = heap[1]; // store element at root with a temporary variable
+    heap[1] = heap[size]; // replace element at root with the final element
     size--; // Decrease size
-    DownHeap(0);
+    DownHeap(1);
 
     return min;
 }
@@ -236,7 +238,7 @@ int Max (int index)
 void DisplayHeap() 
 {
     printf("Heap: ");
-    for (int i = 0; i < size; i++) 
+    for (int i = 1; i <= size; i++) 
     {
         printf("%d ", heap[i]);
     }
@@ -283,12 +285,12 @@ int main() {
     Insert(16);
     DisplayHeap();
 
-    printf("Min element: %d\n", Min(0));
+    printf("Min element: %d\n", Min(1));
     printf("Removing min element...\n");
     RemoveMin();
     DisplayHeap();
 
-    printf("Max element: %d\n", Max(0));
+    printf("Max element: %d\n", Max(1));
 
     printf("Heap size: %d\n", HeapSize());
     printf("Is heap empty? %s\n", isEmpty() ? "Yes" : "No");
@@ -299,5 +301,6 @@ int main() {
     int n = sizeof(arr) / sizeof(arr[0]);
 
     HeapSort(arr, n);
+
     return 0;
 }
