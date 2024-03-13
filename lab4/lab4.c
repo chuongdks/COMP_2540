@@ -4,7 +4,7 @@
 #include <time.h>
 #include <string.h>
 
-#define MAX_HEAP_SIZE 100
+#define MAX_HEAP_SIZE 104858099
 
 int heap[MAX_HEAP_SIZE];
 int size = 0;
@@ -255,14 +255,14 @@ void HeapSort (int arr[], int n)
         Insert(arr[i]);
     }
     
-    DisplayHeap();
+    // DisplayHeap(); // uncomment to see the Heap 
 
     // Extract elements from heap in sorted order
-    printf("Sorted Heap: ");
+    // printf("Sorted Heap: ");
     for (int i = 0; i < n; i++) 
     {
         arr[i] = RemoveMin();
-        printf("%d ", arr[i]);
+        //printf("%d ", arr[i]); // uncomment to see the Sorted Heap 
     }  
 }
 
@@ -281,7 +281,8 @@ void menu(void)
     " 4. Check if the Heap is Empty and Check its Size.\n"
     " 5. Display the Heap\n"
     " 6. Emptied the Heap\n"
-    " 7. Test the running time for the Heap Sort\n"
+    " 7. Testing the Heap Sort\n"
+    " 8. Test the running time for the Heap Sort\n"
     " 0. Exit.\n");
 }
 
@@ -336,10 +337,20 @@ int main() {
             //Press 6 to Emptied the Heap
             case 6:
                 ClearHeap();
-                break;               
+                break;        
 
-            //Press 7 to Test the running time for the Heap Sort
+            //Press 7 to Test HeapSort
             case 7:
+                ClearHeap();
+
+                int arr[] = {1, 3, 5, 7, 9, 10, 8, 6, 4, 2 };
+                int n = sizeof(arr) / sizeof(arr[0]);
+
+                HeapSort(arr, n);
+                break;      
+
+            //Press 8 to Test the running time for the Heap Sort
+            case 8:
                 // Open file to read and write
                 fp = fopen ("CPU_Time_Heap_Sort.txt", "w");
 
@@ -347,11 +358,11 @@ int main() {
                 srand(time(NULL));
 
                 fprintf(fp, "\n");
-                fprintf(fp, "Insertion Sort:\n");
+                fprintf(fp, "Heap Sort:\n");
                 fprintf(fp, "Size | Time\n");
                 fprintf(fp, "-----|------\n");
 
-                // Loop through different sizes using Insertion Sort
+                // Loop through different sizes using Heap Sort
                 for (int i = 8; i < 1048577; i*=2) // 64 --> 1048576 // Memory allocation failed
                 {
                     ClearHeap();
@@ -379,16 +390,14 @@ int main() {
                     clock_t end_time = clock();
                     // Calculate elapsed time in nanoseconds
                     double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
-                    
-                    // Print the
-                    // printf("\nSorted Arrays using Insertion Sort: ");
-                    // printArray (listS, i);
 
                     // Print the elapsed time
                     // printf("%d |  %.2f seconds\n", i, elapsed_time);
 
                     // Print the elapsed time to a file
                     fprintf(fp, "%d |  %.2f seconds\n", i, elapsed_time);
+
+                    free(listS);
                 }
                                                
                 fclose (fp);
