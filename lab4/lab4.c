@@ -38,34 +38,40 @@ void Swap (int *x, int *y)
 // In-order traversal
 void inorderTraversal(int index) 
 {
+    printf("In-Order Traversal: ");
     if (index <= size) 
     {
         inorderTraversal(LeftChild(index)); // Traverse left subtree
         printf("%d ", heap[index]);         // Visit current node
         inorderTraversal(RightChild(index)); // Traverse right subtree
     }
+    printf("\n");
 }
 
 // Pre-order traversal
 void preorderTraversal(int index) 
 {
+    printf("In-Order Traversal: ");
     if (index <= size) 
     {
         printf("%d ", heap[index]);         // Visit current node
         preorderTraversal(LeftChild(index)); // Traverse left subtree
         preorderTraversal(RightChild(index)); // Traverse right subtree
     }
+    printf("\n");
 }
 
 // Post-order traversal
 void postorderTraversal(int index) 
 {
+    printf("In-Order Traversal: ");
     if (index <= size) 
     {
         postorderTraversal(LeftChild(index)); // Traverse left subtree
         postorderTraversal(RightChild(index)); // Traverse right subtree
         printf("%d ", heap[index]);          // Visit current node
     }
+    printf("\n");
 }
 
 int HeapSize() 
@@ -150,7 +156,7 @@ void DownHeap (int index)
     }
 }
 
-// 4. Remove the root of the Node and replace it with the 
+// 4. Remove the root of the Node and replace it with the last node, then Downheap it
 int RemoveMin() 
 {
     if (size < 1) 
@@ -197,7 +203,7 @@ int Min (int index)
 
     if (leftMin < min)
     {
-         min = leftMin;
+        min = leftMin;
     }
     if (rightMax < min)
     {
@@ -255,14 +261,14 @@ void HeapSort (int arr[], int n)
         Insert(arr[i]);
     }
     
-    // DisplayHeap(); // uncomment to see the Heap 
+    DisplayHeap(); // uncomment to see the Heap 
 
     // Extract elements from heap in sorted order
-    // printf("Sorted Heap: ");
+    printf("Sorted Heap: "); // uncomment to see the Heap 
     for (int i = 0; i < n; i++) 
     {
         arr[i] = RemoveMin();
-        //printf("%d ", arr[i]); // uncomment to see the Sorted Heap 
+        printf("%d ", arr[i]); // uncomment to see the Sorted Heap 
     }  
 }
 
@@ -283,6 +289,7 @@ void menu(void)
     " 6. Emptied the Heap\n"
     " 7. Testing the Heap Sort\n"
     " 8. Test the running time for the Heap Sort\n"
+    " 9. Print the Heap in 3 Different Traversal Mode\n"
     " 0. Exit.\n");
 }
 
@@ -343,7 +350,9 @@ int main() {
             case 7:
                 ClearHeap();
 
-                int arr[] = {1, 3, 5, 7, 9, 10, 8, 6, 4, 2 };
+                int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+                // int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                // int arr[] = {1, 3, 5, 7, 9, 10, 8, 6, 4, 2 };
                 int n = sizeof(arr) / sizeof(arr[0]);
 
                 HeapSort(arr, n);
