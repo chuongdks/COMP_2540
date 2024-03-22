@@ -95,65 +95,91 @@ Node* deleteNode(Node* node, int key)
 	// Base case
 	if (isExternal(node))
 	{
-		return node;
+		printf("No value of %d in this tree to be deleted\n", key);
+		return node; // return the default node, no 
 	}
 
 	// Otherwise, do recursive call down the tree of the node to be deleted
 	if (key < node->key) 
 	{
 		node->left = deleteNode(node->left, key);
-		return node;
+		return node; // return the default node or the replaced node depends if if reached 
 	}
 	else if (key > node->key) 
 	{
 		node->right = deleteNode(node->right, key);
-		return node;
+		return node; // return the default node
 	}
 
-	// We reach here when this is the node to be deleted.
+	/*  The code Reaching here means the key == node->key. Do the Deletion and Replacement  */
 
-	// Case 1: If one of the children is empty
-	if (node->left == NULL) 
+	// Case 1: If one of the Delete Node's Children is empty, replace it with the Children if available
+	if (node->left == NULL) // If Left Child is empty
 	{
-		Node* temp = node->right;
-		free(node);
-		return temp;
+		Node* replacementNode = node->right; // Store content of Right Child to be return
+		free(node); // Free the node along with its children
+		return replacementNode;
 	}
-	else if (node->right == NULL) 
+	else if (node->right == NULL)  // If Right Child is empty
 	{
-		Node* temp = node->left;
-		free(node);
-		return temp;
+		Node* replacementNode = node->left; // Store content of Left Child to be return
+		free(node); // Free the node along with its children
+		return replacementNode;
 	}
 
-	// Case 2: If both children exist
+	// Case 2: If both children exist, then find the Successor Node on the Left or Right Subtree for replacement (Strongest Left Subtree Node vs Weakest Right Subtree Node)
 	else 
 	{
-		Node* succParent = node;
+		// Parent's Node of the Successor Node
+		Node* successorParent = node;
 
-		// Find successor
-		Node* succ = node->right;
-		while (succ->left != NULL) {
-			succParent = succ;
-			succ = succ->left;
+		// Find Successor Node on the Right sub tree (Smallest Right Subtree Node)
+		Node* successor = node->right;
+		while (successor->left != NULL) // The smallest Node in right sub tree is on the left so go to the left Node until reached empty
+		{
+			successorParent = successor;
+			successor = successor->left;
 		}
 
-		// Delete successor. Since successor
-		// is always left child of its parent
-		// we can safely make successor's right
-		// right child as left of its parent.
-		// If there is no succ, then assign
-		// succ->right to succParent->right
-		if (succParent != node)
-			succParent->left = succ->right;
+		// After finding the right Successor Node -> Rearranging the Tree order before the Successor Node key will replace in the Deleted Node key
+		if (successorParent != node) 
+		{
+			// If the node move, then Successor Parent Left Child will be Successor Right Child
+			successorParent->left = successor->right; 
+		}
 		else
-			succParent->right = succ->right;
+		{
+			// If the node doesnt move (The replacement is the Deleted node Child), then Successor Parent Right Child will be Successor Right Child
+			successorParent->right = successor->right; 
+		}
 
-		// Copy Successor Data to node
-		node->key = succ->key;
+		/* Uncomment 2 code block below to Find the successor Node on the left sub tree instead */
 
-		// Delete Successor and return node
-		free(succ);
+		// // Find Successor Node on the Left sub tree (Biggest Left Subtree Node)
+		// Node* successor = node->left;
+		// while (successor->right != NULL) // The smallest Node in left sub tree is on the right so go to the right Node until reached empty
+		// {
+		// 	successorParent = successor;
+		// 	successor = successor->right;
+		// }
+
+		// // After finding the right Successor Node -> Rearranging the Tree order before the Successor Node key will replace in the Deleted Node key
+		// if (successorParent != node)
+		// {
+		// // If the node move, then Successor Parent Right Child will be Successor Left Child
+		// 	successorParent->right = successor->left; 
+		// }
+		// else
+		// {
+		// // If the node doesnt move (The replacement is the Deleted node Child), then Successor Parent Left Child will be Successor Left Child
+		// 	successorParent->left = successor->left; 
+		// }
+
+		// Replace Successor key to Delted node key
+		node->key = successor->key;
+
+		// Delete Successor Node and return node
+		free(successor);
 		return node;
 	}
 }
@@ -161,14 +187,17 @@ Node* deleteNode(Node* node, int key)
 // Driver Code
 int main()
 {
-    /* Let us create following BST
+    /* 
               50
            /     \
           30      70
          /  \    /  \
-       20   40  60   80 */
+       20   40  60   80 
+	*/
+
 	Node* root = NULL;
-	root = Insert(root, 50);
+	root = Insert(root, 50); // Need one Root Node variable
+
 	Insert(root, 30);
 	Insert(root, 20);
 	Insert(root, 40);
@@ -205,17 +234,17 @@ int main()
 	inorder(root);
 
 	printf("\n\nDelete a Leaf Node: 20\n");
-	root = deleteNode(root, 20);
+	deleteNode(root, 20);
 	printf("Modified BST tree after deleting Leaf Node:\n");
 	inorder(root);
 
 	printf("\n\nDelete Node with single child: 70\n");
-	root = deleteNode(root, 70);
+	deleteNode(root, 70);
 	printf("Modified BST tree after deleting single child Node:\n");
 	inorder(root);
 
 	printf("\n\nDelete Node with both child: 50\n");
-	root = deleteNode(root, 50);
+	deleteNode(root, 50);
 	printf("Modified BST tree after deleting both child Node:\n");
 	inorder(root);    
 	return 0;
