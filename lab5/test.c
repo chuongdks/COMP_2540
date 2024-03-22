@@ -3,7 +3,8 @@
 
 typedef struct Node_struct {
 	int key;
-	struct Node_struct *left, *right;
+	struct Node_struct *left;
+	struct Node_struct *right;
 } Node;
 
 // A utility function to create a new BST node
@@ -16,96 +17,117 @@ Node* createNode(int item)
 }
 
 // A utility function to do inorder traversal of BST
-void inorder(Node* root)
+void inorder(Node* node)
 {
-	if (root != NULL) 
+	if (node != NULL) 
 	{
-		inorder(root->left);
-		printf("%d ", root->key);
-		inorder(root->right);
+		inorder(node->left);
+		printf("%d ", node->key);
+		inorder(node->right);
 	}
 }
 
-// Utility function to search a key in a BST
-Node* search(Node* root, int key)
+// A utility function to check if the node is an External node
+int isExternal(Node* node)
 {
-	// Base Cases: root is null or key is present at root
-	if (root == NULL || root->key == key)
-		return root;
-
-	// Key is greater than root's key
-	if (root->key < key)
-		return search(root->right, key);
-
-	// Key is smaller than root's key
-	return search(root->left, key);
+	return node == NULL;
 }
 
-// A utility function to insert
-// a new node with given key in BST
-Node* insert(Node* node, int key)
+// Utility function to search a key in a BST
+Node* TreeSearch(Node* node, int key)
 {
-	// If the tree is empty, return a new node
-	if (node == NULL)
+	// Base Cases: node is null or key is present at node
+	if (isExternal(node) || node->key == key)
+	{
+		return node; // Return the Base case's node
+	}
+
+	// General case
+	if (key < node->key) // Key is less than node's key
+	{
+		return TreeSearch(node->left, key);		
+	}
+	else if (key > node->key) // Key is greater than node's key
+	{
+		return TreeSearch(node->right, key);
+	}
+}
+
+// A utility function to insert a new node with given key in BST
+Node* Insert(Node* node, int key)
+{
+	// Base case, Node is empty so create a new node with NULL left and right child
+	if (isExternal(node))
 	{
 		return createNode(key);
 	}
 
 	// Otherwise, recur down the tree
-	if (key < node->key)
+	if (key <= node->key) // If Key is less than node, move to the left Child
 	{
-		node->left = insert(node->left, key);
+		node->left = Insert(node->left, key);
 	}
-	else if (key > node->key)
+	else if (key > node->key) // // If Key is more than node, move to the right Child. Add '>=' if u want equal key to move on the right tree instead of left tree
 	{
-		node->right = insert(node->right, key);
+		node->right = Insert(node->right, key);
 	}
-
-	// Return the (unchanged) node pointer
-	return node;
 }
 
-// /* Given a binary search tree and a key, this function
-// deletes the key and returns the new root */
-// struct Node* deleteNode(struct Node* root, int k)
+// // Insertion Method based on the slide, doesnt work, waste 1.5 hours tryinh to figure out why, the TreeSearch doesnt move the fucking Node
+// Node* Insert(Node* node, int key)
+// {
+// 	Node* keyNode = TreeSearch(node, key);
+// 	if (keyNode == NULL)
+// 	{
+// 		return createNode(key); // No need to InsertAtExternal() cuz the fucking TreeSearch() return the same key or the NULL (External) node
+// 	}
+
+// 	if (keyNode->key == key)
+// 	{
+// 		return Insert(keyNode->left, key); // Or keyNode->right, whatever way is fine
+// 	}
+// }
+
+// /* Given a binary search tree and a key, this function deletes the key and returns the new node */
+// struct Node* deleteNode(struct Node* node, int k)
 // {
 // 	// Base case
-// 	if (root == NULL)
-// 		return root;
+// 	if (node == NULL)
+// 		return node;
 
 // 	// Recursive calls for ancestors of
 // 	// node to be deleted
-// 	if (root->key > k) {
-// 		root->left = deleteNode(root->left, k);
-// 		return root;
+// 	if (node->key > k) {
+// 		node->left = deleteNode(node->left, k);
+// 		return node;
 // 	}
-// 	else if (root->key < k) {
-// 		root->right = deleteNode(root->right, k);
-// 		return root;
+// 	else if (node->key < k) {
+// 		node->right = deleteNode(node->right, k);
+// 		return node;
 // 	}
 
-// 	// We reach here when root is the node
+// 	// We reach here when node is the node
 // 	// to be deleted.
 
 // 	// If one of the children is empty
-// 	if (root->left == NULL) {
-// 		struct Node* temp = root->right;
-// 		free(root);
+// 	if (node->left == NULL) {
+// 		struct Node* temp = node->right;
+// 		free(node);
 // 		return temp;
 // 	}
-// 	else if (root->right == NULL) {
-// 		struct Node* temp = root->left;
-// 		free(root);
+// 	else if (node->right == NULL) {
+// 		struct Node* temp = node->left;
+// 		free(node);
 // 		return temp;
 // 	}
 
 // 	// If both children exist
 // 	else {
 
-// 		struct Node* succParent = root;
+// 		struct Node* succParent = node;
 
 // 		// Find successor
-// 		struct Node* succ = root->right;
+// 		struct Node* succ = node->right;
 // 		while (succ->left != NULL) {
 // 			succParent = succ;
 // 			succ = succ->left;
@@ -117,17 +139,17 @@ Node* insert(Node* node, int key)
 // 		// right child as left of its parent.
 // 		// If there is no succ, then assign
 // 		// succ->right to succParent->right
-// 		if (succParent != root)
+// 		if (succParent != node)
 // 			succParent->left = succ->right;
 // 		else
 // 			succParent->right = succ->right;
 
-// 		// Copy Successor Data to root
-// 		root->key = succ->key;
+// 		// Copy Successor Data to node
+// 		node->key = succ->key;
 
-// 		// Delete Successor and return root
+// 		// Delete Successor and return node
 // 		free(succ);
-// 		return root;
+// 		return node;
 // 	}
 // }
 
@@ -141,23 +163,26 @@ int main()
 		/ \ / \
 	20 40 60 80 */
 	Node* root = NULL;
-	root = insert(root, 50);
-	insert(root, 30);
-	insert(root, 20);
-	insert(root, 40);
-	insert(root, 70);
-	insert(root, 60);
-	insert(root, 60);
-	insert(root, 80);
+	root = Insert(root, 50);
+	Insert(root, 30);
+	Insert(root, 20);
+	Insert(root, 40);
+	Insert(root, 40);
+	Insert(root, 70);
+	Insert(root, 60);
+	Insert(root, 60);
+	Insert(root, 80);
+	Insert(root, 45);
+	Insert(root, 67);
 
 	// Print inorder traversal of the BST
 	inorder(root);
-
+	printf("\n");
 	// Key to be found
 	int key = 6;
 
 	// Searching in a BST
-	if (search(root, key) == NULL)
+	if (TreeSearch(root, key) == NULL)
 		printf("%d not found\n", key);
 	else
 		printf("%d found\n", key);
@@ -165,7 +190,7 @@ int main()
 	key = 60;
 
 	// Searching in a BST
-	if (search(root, key) == NULL)
+	if (TreeSearch(root, key) == NULL)
 		printf("%d not found\n", key);
 	else
 		printf("%d found\n", key);
