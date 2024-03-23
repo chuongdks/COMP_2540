@@ -67,10 +67,12 @@ Node* Insert(Node* node, int key)
 	if (key <= node->key) // If Key is less than Node, move to the left Child
 	{
 		node->left = Insert(node->left, key);
+		return node; 
 	}
 	else if (key > node->key) // If Key is larger than Node, move to the right Child. Add '>=' if u want equal key to move on the right tree instead of left tree
 	{
 		node->right = Insert(node->right, key);
+		return node;
 	}
 }
 
@@ -96,7 +98,7 @@ Node* deleteNode(Node* node, int key)
 	if (isExternal(node))
 	{
 		printf("No value of %d in this tree to be deleted\n", key);
-		return node; // return the default node, no 
+		return node; // return the default node
 	}
 
 	// Otherwise, do recursive call down the tree of the node to be deleted
