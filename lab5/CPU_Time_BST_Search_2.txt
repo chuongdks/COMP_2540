@@ -1,6 +1,2 @@
-
-Heap Sort:
-Size | Time
------|------
-114000000.000000 seconds
-115000000.000000 seconds
+Search time of (1): 0.001000 seconds
+Search time of (15): 0.001000 seconds

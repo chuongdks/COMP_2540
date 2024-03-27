@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <limits.h> 
 
 //Node declaration for the BST
 typedef struct Node_struct {
@@ -186,68 +188,167 @@ Node* deleteNode(Node* node, int key)
 	}
 }
 
-// Driver Code
-int main()
+// Clear the Bonary Search Tree
+void clearBST(Node* node) 
 {
-    /* 
-              50
-           /     \
-          30      70
-         /  \    /  \
-       20   40  60   80 
-	*/
+    if (node == NULL) return;
 
+    // Recursively clear left and right subtrees
+    clearBST(node->left);
+    clearBST(node->right);
+
+    // Free current node
+    free(node);
+}
+
+int main()
+{   
 	Node* root = NULL;
-	root = Insert(root, 50); // Need one Root Node variable
+	FILE * fp;
 
-	Insert(root, 30);
-	Insert(root, 20);
-	Insert(root, 40);
-	// Insert(root, 40);
-	Insert(root, 70);
-	Insert(root, 60);
-	// Insert(root, 60);
-	Insert(root, 80);
-	// Insert(root, 45);
-	// Insert(root, 67);
+	int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+	int n = sizeof(arr) / sizeof(arr[0]);
 
-	// Print inorder traversal of the BST
-	inorder(root);
-	printf("\n");
-	// Key to be found
-	int key = 6;
+	// Build heap
+	for (int i = 0; i < n; i++) 
+	{
+		root = Insert(root, arr[i]);
+	}
 
-	// Searching in a BST
-	if (TreeSearch(root, key) == NULL)
-		printf("%d not found\n", key);
-	else
-		printf("%d found\n", key);
-
-	key = 60;
-
-	// Searching in a BST
-	if (TreeSearch(root, key) == NULL)
-		printf("%d not found\n", key);
-	else
-		printf("%d found\n", key);
-
-    // Delete
 	printf("Original BST: ");
 	inorder(root);
 
-	printf("\n\nDelete a Leaf Node: 20\n");
-	deleteNode(root, 20);
-	printf("Modified BST tree after deleting Leaf Node:\n");
+	root = deleteNode(root, 5);
+	printf("\nModified BST tree after Deleting Node 5: ");
 	inorder(root);
 
-	printf("\n\nDelete Node with single child: 70\n");
-	deleteNode(root, 70);
-	printf("Modified BST tree after deleting single child Node:\n");
-	inorder(root);
+	root = deleteNode(root, 15);
+	printf("\nModified BST tree after Deleting Node 15: ");
+	inorder(root);	
 
-	printf("\n\nDelete Node with both child: 50\n");
-	deleteNode(root, 50);
-	printf("Modified BST tree after deleting both child Node:\n");
-	inorder(root);    
+	root = deleteNode(root, 1);
+	printf("\nModified BST tree after Deleting Node 1: ");
+	inorder(root);		
+
+	root = Insert(root, 2);
+	printf("\nModified BST tree after Inserting Node 2: ");
+	inorder(root);		
+
+	clearBST(root);
+	root = NULL; // REMEMBER TO RESET ROOT TO NULL OR ELSE PROGRAM WILL CRASH AFTER USING IT AND INSERT A NODE
+
+//  Question 7 Onward
+	int arr1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+	int n1 = sizeof(arr) / sizeof(arr[0]);
+
+	int arr2[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15};
+    int n2 = sizeof(arr2) / sizeof(arr2[0]);
+
+	for (int i = 0; i < n2; i++) 
+	{
+		root = Insert(root, arr2[i]);
+	}
+	printf("\nInserting Array 2: ");
+	inorder(root); 
+
+	clearBST(root);
+	root = NULL; // REMEMBER TO RESET ROOT TO NULL OR ELSE PROGRAM WILL CRASH AFTER USING IT AND INSERT A NODE
+
+// Build heap for Array 1
+	for (int i = 0; i < n; i++) 
+	{
+		root = Insert(root, arr1[i]);
+	}
+	printf("\nArray 1: ");
+	inorder(root); // uncomment to see the Heap 
+
+	// Open file to read and write
+	fp = fopen ("CPU_Time_BST_Search.txt", "w");
+
+	/* 1. Loop through different sizes using Heap Sort of key 1 */ 
+	// Start measuring time
+	clock_t start_time = clock();
+	for (int i = 0; i < 10000000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 1);
+	}
+	// Stop measuring time
+	clock_t end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (1): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);      
+
+	/* 2. Loop through different sizes using Heap Sort of key 15 */ 
+	// Start measuring time
+	start_time = clock();
+	for (int i = 0; i < 10000000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 15);
+	}
+	// Stop measuring time
+	end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (15): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);                 
+
+	fclose (fp);
+
+	clearBST(root);
+	root = NULL; // REMEMBER TO RESET ROOT TO NULL OR ELSE PROGRAM WILL CRASH AFTER USING IT AND INSERT A NODE
+
+// Build heap for Array 2
+	for (int i = 0; i < n2; i++) 
+	{
+		root = Insert(root, arr2[i]);
+	}
+	printf("\nArray 2: ");
+	inorder(root); // uncomment to see the Heap 
+
+	// Open file to read and write
+	fp = fopen ("CPU_Time_BST_Search_2.txt", "w");
+
+	/* 1. Loop through different sizes using Heap Sort of key 1 */ 
+	// Start measuring time
+	start_time = clock();
+	for (int i = 0; i < 100000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 1);
+	}
+	// Stop measuring time
+	end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (1): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);      
+
+	/* 2. Loop through different sizes using Heap Sort of key 15 */ 
+	// Start measuring time
+	start_time = clock();
+	for (int i = 0; i < 100000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 15);
+	}
+	// Stop measuring time
+	end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (15): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);                 
+
+	fclose (fp);
 	return 0;
 }

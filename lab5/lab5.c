@@ -120,13 +120,16 @@ Node* deleteNode(Node* node, int key)
 	// Case 1: If one of the Delete Node's Children is empty, replace it with the Children if available
 	if (node->left == NULL) // If Left Child is empty
 	{
+        Node* replacementParent = node;
 		Node* replacementNode = node->right; // Store content of Right Child to be return
 		free(node); // Free the node along with its children
 		return replacementNode;
 	}
 	else if (node->right == NULL)  // If Right Child is empty
 	{
+        Node* replacementParent = node;
 		Node* replacementNode = node->left; // Store content of Left Child to be return
+        node = replacementNode;
 		free(node); // Free the node along with its children
 		return replacementNode;
 	}
@@ -302,7 +305,7 @@ int main()
             //Press 1 to Insert a number into the BST
             case 1:
                 printf("Enter any number to Insert into the BST: ");
-                scanf(" %d", &key);
+                scanf("%d", &key);
                 root = Insert(root, key);
                 InOrderDisplay(root);
                 printf("\n");
@@ -311,7 +314,7 @@ int main()
             //Press 2 to Remove a number from the BST
             case 2:
                 printf("Enter any number to Delete from the BST: ");
-                scanf(" %d", &key);
+                scanf("%d", &key);
                 deleteNode(root, key);
                 InOrderDisplay(root);
                 printf("\n");
@@ -336,7 +339,7 @@ int main()
             //Press 4 to Insert an Array into the BST (Modify the array)
             case 4:
             {
-                int arr[] = {1, -1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+                int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
                 // int arr[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15};
                 int n = sizeof(arr) / sizeof(arr[0]);
                 // Build heap
@@ -373,14 +376,6 @@ int main()
                 // Open file to read and write
                 fp = fopen ("CPU_Time_BST_Search.txt", "w");
 
-                // Seed the random number generator using the current time
-                srand(time(NULL));
-
-                fprintf(fp, "\n");
-                fprintf(fp, "Heap Sort:\n");
-                fprintf(fp, "Size | Time\n");
-                fprintf(fp, "-----|------\n");
-
                 /* 1. Loop through different sizes using Heap Sort of key 1 */ 
                 // Start measuring time
                 clock_t start_time = clock();
@@ -398,6 +393,7 @@ int main()
                 // printf("%d |  %.2f seconds\n", i, elapsed_time);
 
                 // Print the elapsed time to a file
+                fprintf(fp, "Search time of (1): ");
                 fprintf(fp, "%f seconds\n", elapsed_time);      
 
                 /* 2. Loop through different sizes using Heap Sort of key 15 */ 
@@ -417,6 +413,7 @@ int main()
                 // printf("%d |  %.2f seconds\n", i, elapsed_time);
 
                 // Print the elapsed time to a file
+                fprintf(fp, "Search time of (15): ");
                 fprintf(fp, "%f seconds\n", elapsed_time);                 
 
                 fclose (fp);
@@ -433,14 +430,6 @@ int main()
 
                 // Open file to read and write
                 fp = fopen ("CPU_Time_BST_Search_2.txt", "w");
-
-                // Seed the random number generator using the current time
-                srand(time(NULL));
-
-                fprintf(fp, "\n");
-                fprintf(fp, "Heap Sort:\n");
-                fprintf(fp, "Size | Time\n");
-                fprintf(fp, "-----|------\n");
 
                 /* 1. Loop through different sizes using Heap Sort of key 1 */ 
                 // Start measuring time
@@ -459,6 +448,7 @@ int main()
                 // printf("%d |  %.2f seconds\n", i, elapsed_time);
 
                 // Print the elapsed time to a file
+                fprintf(fp, "Search time of (1): ");
                 fprintf(fp, "%f seconds\n", elapsed_time);      
 
                 /* 2. Loop through different sizes using Heap Sort of key 15 */ 
@@ -478,6 +468,7 @@ int main()
                 // printf("%d |  %.2f seconds\n", i, elapsed_time);
 
                 // Print the elapsed time to a file
+                fprintf(fp, "Search time of (15): ");
                 fprintf(fp, "%f seconds\n", elapsed_time);                 
 
                 fclose (fp);
