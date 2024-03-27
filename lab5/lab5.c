@@ -188,6 +188,65 @@ Node* deleteNode(Node* node, int key)
 	}
 }
 
+// // Function to find the node with minimum key value in a subtree
+// Node* minValueNode(Node* node)
+// {
+//     Node* current = node;
+//     // Loop down to find the leftmost leaf
+//     while (current && current->left != NULL)
+//     {
+//         current = current->left;
+//     }
+//     return current;
+// }
+
+// Node* deleteNode(Node* node, int key)
+// {
+//     // Base case
+//     if (node == NULL)
+//     {
+//         printf("No value of %d in this tree to be deleted\n", key);
+//         return node;
+//     }
+
+//     // Find the node to be deleted
+//     if (key < node->key)
+//     {
+//         node->left = deleteNode(node->left, key);
+//     }
+//     else if (key > node->key)
+//     {
+//         node->right = deleteNode(node->right, key);
+//     }
+//     else // Key found, perform deletion
+//     {
+//         // Case 1: Node to be deleted has one or no child
+//         if (node->left == NULL)
+//         {
+//             Node* temp = node->right;
+//             free(node);
+//             return temp; // Return the right child or NULL if no child exists
+//         }
+//         else if (node->right == NULL)
+//         {
+//             Node* temp = node->left;
+//             free(node);
+//             return temp; // Return the left child
+//         }
+
+//         // Case 2: Node to be deleted has two children
+//         // Find the inorder successor (smallest node in the right subtree)
+//         Node* temp = minValueNode(node->right);
+
+//         // Copy the inorder successor's content to this node
+//         node->key = temp->key;
+
+//         // Delete the inorder successor
+//         node->right = deleteNode(node->right, temp->key);
+//     }
+//     return node;
+// }
+
 // Clear the Bonary Search Tree
 void clearBST(Node* node) 
 {
@@ -227,8 +286,8 @@ int main()
     Node* root = NULL;
 
     int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-    int arr2[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15};
     int n = sizeof(arr) / sizeof(arr[0]);
+    int arr2[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15};
     int n2 = sizeof(arr2) / sizeof(arr2[0]);
 
     FILE * fp;
@@ -276,6 +335,10 @@ int main()
 
             //Press 4 to Insert an Array into the BST (Modify the array)
             case 4:
+            {
+                int arr[] = {1, -1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+                // int arr[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15};
+                int n = sizeof(arr) / sizeof(arr[0]);
                 // Build heap
                 for (int i = 0; i < n; i++) 
                 {
@@ -284,6 +347,7 @@ int main()
                 
                 InOrderDisplay(root); // uncomment to see the Heap 
                 break;   
+            }
 
             //Press 5 to Display the BST
             case 5:
