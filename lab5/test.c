@@ -270,7 +270,7 @@ int main()
 	printBST(root);
 	
 	clearBST(root);
-	root = NULL; // REMEMBER TO RESET ROOT TO NULL OR ELSE PROGRAM WILL CRASH AFTER USING IT AND INSERT A NODE
+	root = NULL;
 
 //  Question 7 Onward
 	int arr1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
@@ -289,105 +289,103 @@ int main()
 	printBST(root);
 
 	clearBST(root);
+	root = NULL; 
+
+// Build heap for Array 1
+	for (int i = 0; i < n; i++) 
+	{
+		root = Insert(root, arr1[i]);
+	}
+	printf("\nArray 1: ");
+	inorder(root); // uncomment to see the Heap 
+
+	// Open file to read and write
+	fp = fopen ("CPU_Time_BST_Search.txt", "w");
+
+	/* 1. Loop through different sizes using Heap Sort of key 1 */ 
+	// Start measuring time
+	clock_t start_time = clock();
+	for (int i = 0; i < 10000000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 1);
+	}
+	// Stop measuring time
+	clock_t end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (1): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);      
+
+	/* 2. Loop through different sizes using Heap Sort of key 15 */ 
+	// Start measuring time
+	start_time = clock();
+	for (int i = 0; i < 10000000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 15);
+	}
+	// Stop measuring time
+	end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (15): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);                 
+
+	fclose (fp);
+
+	clearBST(root);
 	root = NULL; // REMEMBER TO RESET ROOT TO NULL OR ELSE PROGRAM WILL CRASH AFTER USING IT AND INSERT A NODE
 
-	
+// Build heap for Array 2
+	for (int i = 0; i < n2; i++) 
+	{
+		root = Insert(root, arr2[i]);
+	}
+	printf("\nArray 2: ");
+	inorder(root); // uncomment to see the Heap 
 
-// // Build heap for Array 1
-// 	for (int i = 0; i < n; i++) 
-// 	{
-// 		root = Insert(root, arr1[i]);
-// 	}
-// 	printf("\nArray 1: ");
-// 	inorder(root); // uncomment to see the Heap 
+	// Open file to read and write
+	fp = fopen ("CPU_Time_BST_Search_2.txt", "w");
 
-// 	// Open file to read and write
-// 	fp = fopen ("CPU_Time_BST_Search.txt", "w");
+	/* 1. Loop through different sizes using Heap Sort of key 1 */ 
+	// Start measuring time
+	start_time = clock();
+	for (int i = 0; i < 10000000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 1);
+	}
+	// Stop measuring time
+	end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
 
-// 	/* 1. Loop through different sizes using Heap Sort of key 1 */ 
-// 	// Start measuring time
-// 	clock_t start_time = clock();
-// 	for (int i = 0; i < 10000000; i++) 
-// 	{                
-// 		// Do the Tree Search for key 1  
-// 		TreeSearch (root, 1);
-// 	}
-// 	// Stop measuring time
-// 	clock_t end_time = clock();
-// 	// Calculate elapsed time in nanoseconds
-// 	double elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (1): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);      
 
-// 	// Print the elapsed time to a file
-// 	fprintf(fp, "Search time of (1): ");
-// 	fprintf(fp, "%f seconds\n", elapsed_time);      
+	/* 2. Loop through different sizes using Heap Sort of key 15 */ 
+	// Start measuring time
+	start_time = clock();
+	for (int i = 0; i < 10000000; i++) 
+	{                
+		// Do the Tree Search for key 1  
+		TreeSearch (root, 15);
+	}
+	// Stop measuring time
+	end_time = clock();
+	// Calculate elapsed time in nanoseconds
+	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
 
-// 	/* 2. Loop through different sizes using Heap Sort of key 15 */ 
-// 	// Start measuring time
-// 	start_time = clock();
-// 	for (int i = 0; i < 10000000; i++) 
-// 	{                
-// 		// Do the Tree Search for key 1  
-// 		TreeSearch (root, 15);
-// 	}
-// 	// Stop measuring time
-// 	end_time = clock();
-// 	// Calculate elapsed time in nanoseconds
-// 	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
+	// Print the elapsed time to a file
+	fprintf(fp, "Search time of (15): ");
+	fprintf(fp, "%f seconds\n", elapsed_time);                 
 
-// 	// Print the elapsed time to a file
-// 	fprintf(fp, "Search time of (15): ");
-// 	fprintf(fp, "%f seconds\n", elapsed_time);                 
-
-// 	fclose (fp);
-
-// 	clearBST(root);
-// 	root = NULL; // REMEMBER TO RESET ROOT TO NULL OR ELSE PROGRAM WILL CRASH AFTER USING IT AND INSERT A NODE
-
-// // Build heap for Array 2
-// 	for (int i = 0; i < n2; i++) 
-// 	{
-// 		root = Insert(root, arr2[i]);
-// 	}
-// 	printf("\nArray 2: ");
-// 	inorder(root); // uncomment to see the Heap 
-
-// 	// Open file to read and write
-// 	fp = fopen ("CPU_Time_BST_Search_2.txt", "w");
-
-// 	/* 1. Loop through different sizes using Heap Sort of key 1 */ 
-// 	// Start measuring time
-// 	start_time = clock();
-// 	for (int i = 0; i < 100000; i++) 
-// 	{                
-// 		// Do the Tree Search for key 1  
-// 		TreeSearch (root, 1);
-// 	}
-// 	// Stop measuring time
-// 	end_time = clock();
-// 	// Calculate elapsed time in nanoseconds
-// 	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
-
-// 	// Print the elapsed time to a file
-// 	fprintf(fp, "Search time of (1): ");
-// 	fprintf(fp, "%f seconds\n", elapsed_time);      
-
-// 	/* 2. Loop through different sizes using Heap Sort of key 15 */ 
-// 	// Start measuring time
-// 	start_time = clock();
-// 	for (int i = 0; i < 100000; i++) 
-// 	{                
-// 		// Do the Tree Search for key 1  
-// 		TreeSearch (root, 15);
-// 	}
-// 	// Stop measuring time
-// 	end_time = clock();
-// 	// Calculate elapsed time in nanoseconds
-// 	elapsed_time = ((double)(end_time - start_time) / CLOCKS_PER_SEC); // * 1e9;
-
-// 	// Print the elapsed time to a file
-// 	fprintf(fp, "Search time of (15): ");
-// 	fprintf(fp, "%f seconds\n", elapsed_time);                 
-
-// 	fclose (fp);
+	fclose (fp);
 	return 0;
 }

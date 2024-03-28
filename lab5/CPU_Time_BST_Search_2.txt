@@ -1,2 +1,2 @@
-Search time of (1): 0.001000 seconds
-Search time of (15): 0.001000 seconds
+Search time of (1): 0.206000 seconds
+Search time of (15): 0.202000 seconds
